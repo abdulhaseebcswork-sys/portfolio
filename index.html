@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abdul Haseeb | Mobile Application & Flutter Developer Portfolio</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Portfolio of Abdul Haseeb, a professional Mobile Application and Flutter Developer with experience in Android development, UI/UX design, and API integration.">
+  <meta name="keywords" content="Abdul Haseeb, Flutter, Android Developer, Mobile Apps, Portfolio, CV, Wahcantt, Pakistan, Web Developer">
+  <meta name="author" content="Abdul Haseeb">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Link Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       HEADER & NAVIGATION
+       ========================================================================== -->
+  <header class="header" id="header">
+    <div class="container nav-container">
+      <a href="#home" class="logo">
+        <i class="fa-solid fa-code"></i> Haseeb<span>Portfolio</span>
+      </a>
+      
+      <nav class="nav-menu">
+        <ul class="nav-links">
+          <li class="nav-item active"><a href="#home">Home</a></li>
+          <li class="nav-item"><a href="#about">About</a></li>
+          <li class="nav-item"><a href="#skills">Skills</a></li>
+          <li class="nav-item"><a href="#projects">Projects</a></li>
+          <li class="nav-item"><a href="#experience">Experience</a></li>
+          <li class="nav-item"><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      
+      <button class="hamburger" id="hamburger" aria-label="Toggle Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       HERO SECTION
+       ========================================================================== -->
+  <section class="hero" id="home">
+    <!-- Ambient Background Glows -->
+    <div class="hero-glow-1"></div>
+    <div class="hero-glow-2"></div>
+
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <div class="hero-tag">Available for Internships & Projects</div>
+        <h1>Hi, I'm <br><span class="hero-name">Abdul Haseeb</span></h1>
+        <div class="hero-title">
+          I'm a <span id="typing-text"></span><span class="typing-cursor"></span>
+        </div>
+        <p class="hero-desc">
+          Passionate BS Computer Science student and Mobile Application Developer specializing in Flutter and native Android. I build elegant, performant mobile apps integrated with real-time backend databases and external APIs.
+        </p>
+        <div class="hero-buttons">
+          <a href="#projects" class="btn btn-primary">
+            <i class="fa-solid fa-briefcase"></i> View Projects
+          </a>
+          <a href="#contact" class="btn btn-secondary">
+            <i class="fa-solid fa-paper-plane"></i> Contact Me
+          </a>
+        </div>
+      </div>
+      
+      <div class="hero-image-wrapper">
+        <div class="avatar-glow"></div>
+        <div class="avatar-frame">
+          <img src="haseebimg.jpeg" alt="Abdul Haseeb Profile Photo">
+        </div>
+        
+        <!-- Floating Skills Icons around DP -->
+        <div class="floating-icon icon-flutter">
+          <i class="fa-solid fa-mobile-screen-button" style="color: #38bdf8;"></i> <span>Flutter</span>
+        </div>
+        <div class="floating-icon icon-android">
+          <i class="fa-brands fa-android" style="color: #a4c639;"></i> <span>Android</span>
+        </div>
+        <div class="floating-icon icon-firebase">
+          <i class="fa-solid fa-cloud" style="color: #ffca28;"></i> <span>Firebase</span>
+        </div>
+        <div class="floating-icon icon-ux">
+          <i class="fa-solid fa-palette" style="color: #f43f5e;"></i> <span>UI/UX</span>
+        </div>
+        <div class="floating-icon icon-api">
+          <i class="fa-solid fa-network-wired" style="color: #60a5fa;"></i> <span>REST API</span>
+        </div>
+        <div class="floating-icon icon-video">
+          <i class="fa-solid fa-video" style="color: #a78bfa;"></i> <span>Video Edit</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       PROMOTIONAL SEAMLESS SCROLLING BANNER
+       ========================================================================== -->
+  <div class="promo-banner">
+    <div class="promo-banner-inner">
+      <div class="promo-banner-text">
+        <span>Flutter Developer</span>
+        <span>Android App Developer</span>
+        <span>UI/UX Designer</span>
+        <span>Firebase Specialist</span>
+        <span>API Integrations</span>
+        <span>Video Editor</span>
+      </div>
+      <div class="promo-banner-text">
+        <span>Flutter Developer</span>
+        <span>Android App Developer</span>
+        <span>UI/UX Designer</span>
+        <span>Firebase Specialist</span>
+        <span>API Integrations</span>
+        <span>Video Editor</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       ABOUT & EDUCATION SECTION
+       ========================================================================== -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="section-header">
+        <h2>About & Education</h2>
+        <p>A look into my academic journey, core background, and certifications.</p>
+      </div>
+      
+      <div class="about-grid">
+        <div class="about-info">
+          <h3>Professional Profile</h3>
+          <p>
+            Currently pursuing my Bachelor of Science in Computer Science at the University of Wah, I am deeply invested in creating applications that solve everyday problems. I focus on developing clean UI/UX designs and integrating robust API backends to deliver engaging mobile experiences.
+          </p>
+          <p>
+            In addition to app development, I have experience editing documentary-style videos for storytelling on YouTube, allowing me to blend engineering and visual creativity.
+          </p>
+          
+          <div class="about-stats">
+            <div class="glass-card stat-item">
+              <span class="stat-num">4+</span>
+              <p class="stat-label">Complex Apps Built</p>
+            </div>
+            <div class="glass-card stat-item">
+              <span class="stat-num">3+</span>
+              <p class="stat-label">Certifications Earned</p>
+            </div>
+          </div>
+        </div>
+        
+        <div>
+          <h3>Education Timeline</h3>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-date">Current Student (Graduating 2027)</div>
+              <div class="glass-card timeline-card">
+                <h4>BS Computer Science</h4>
+                <h5>University of Wah, Wahcantt, Pakistan</h5>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Focusing on core computer science subjects, software engineering, databases, and mobile system architectures.</p>
+              </div>
+            </div>
+            
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-date">Dec 2025 - Jan 2026</div>
+              <div class="glass-card timeline-card">
+                <h4>Introduction to AI</h4>
+                <h5>The Open University (United Kingdom)</h5>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Earned certification covering foundational artificial intelligence principles, machine learning concepts, and modern AI implementations.</p>
+              </div>
+            </div>
+            
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-date">Feb 2026</div>
+              <div class="glass-card timeline-card">
+                <h4>App Development with Flutter</h4>
+                <h5>Cipher Schools</h5>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Comprehensive practical course detailing state management, clean architecture, responsive layouts, and animations in Flutter.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SKILLS SECTION
+       ========================================================================== -->
+  <section class="skills" id="skills">
+    <div class="container">
+      <div class="section-header">
+        <h2>My Skills</h2>
+        <p>Technologies, frameworks, and tools I use to bring mobile solutions to life.</p>
+      </div>
+      
+      <div class="skills-grid">
+        <div class="glass-card skill-card">
+          <div class="skill-icon">
+            <i class="fa-brands fa-android"></i>
+          </div>
+          <h3>Android Development</h3>
+          <p>Proficient in native Android development, managing lifecycle, design guidelines, and system APIs.</p>
+        </div>
+        
+        <div class="glass-card skill-card">
+          <div class="skill-icon">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+          </div>
+          <h3>Flutter Development</h3>
+          <p>Building high-performance cross-platform apps using Dart, covering state management and customized UI components.</p>
+        </div>
+        
+        <div class="glass-card skill-card">
+          <div class="skill-icon">
+            <i class="fa-solid fa-palette"></i>
+          </div>
+          <h3>UI/UX Design</h3>
+          <p>Designing modern, intuitive layouts with a focus on responsiveness, dark modes, and micro-interactions.</p>
+        </div>
+        
+        <div class="glass-card skill-card">
+          <div class="skill-icon">
+            <i class="fa-solid fa-cloud"></i>
+          </div>
+          <h3>Firebase Integration</h3>
+          <p>Integrating cloud services including Cloud Firestore real-time databases and Cloud Storage for assets.</p>
+        </div>
+        
+        <div class="glass-card skill-card">
+          <div class="skill-icon">
+            <i class="fa-solid fa-network-wired"></i>
+          </div>
+          <h3>REST API Services</h3>
+          <p>Connecting apps with online databases and RESTful APIs to deliver real-time data synchronization.</p>
+        </div>
+        
+        <div class="glass-card skill-card">
+          <div class="skill-icon">
+            <i class="fa-solid fa-video"></i>
+          </div>
+          <h3>Video Editing</h3>
+          <p>Editing documentary-style story videos, pacing, audio synchronization, and visual effects (Movavi).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       PROJECTS SECTION (WITH INTERACTIVE LIGHTBOX PREVIEW)
+       ========================================================================== -->
+  <section class="projects" id="projects">
+    <div class="container">
+      <div class="section-header">
+        <h2>Featured Projects</h2>
+        <p>Click on any project's cover image to open it in a full-screen preview. If there are multiple images, navigate using the control buttons.</p>
+      </div>
+      
+      <div class="projects-grid">
+        <!-- Project 1: Flutter E-Commerce -->
+        <div class="glass-card project-card">
+          <div class="project-img-wrapper">
+            <img src="e%20commerce.png" alt="Flutter E-Commerce App Interface">
+            <div class="project-overlay" data-images="e%20commerce.png" data-title="Flutter E-Commerce App">
+              <button class="project-zoom-btn" aria-label="Open Fullscreen Preview">
+                <i class="fa-solid fa-expand"></i>
+              </button>
+              <span class="project-overlay-text">CLICK TO ZOOM</span>
+            </div>
+          </div>
+          <div class="project-info">
+            <span class="project-date">1 APR 2026 - 30 APR 2026</span>
+            <h3>Flutter E-Commerce</h3>
+            <p>A mobile application designed to make online shopping simple and user-friendly. Includes secure login, product category browsing, filter searches, shopping cart, and order tracking. Integrates payment systems and real-time notifications.</p>
+            <div class="project-tags">
+              <span>Flutter</span>
+              <span>Dart</span>
+              <span>REST API</span>
+              <span>E-commerce</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2: Flutter Collage Alert -->
+        <div class="glass-card project-card">
+          <div class="project-img-wrapper">
+            <img src="collage%20alert.png" alt="Flutter Collage Alert Interface">
+            <div class="project-overlay" data-images="collage%20alert.png" data-title="Flutter Collage Alert App">
+              <button class="project-zoom-btn" aria-label="Open Fullscreen Preview">
+                <i class="fa-solid fa-expand"></i>
+              </button>
+              <span class="project-overlay-text">CLICK TO ZOOM</span>
+            </div>
+          </div>
+          <div class="project-info">
+            <span class="project-date">1 APR 2026 - 30 APR 2026</span>
+            <h3>Flutter Collage Alert</h3>
+            <p>A mobile app built to help students and faculty stay updated with important college announcements, events, and alerts. Provides instant real-time notifications and an intuitive post-publishing portal.</p>
+            <div class="project-tags">
+              <span>Flutter</span>
+              <span>Firebase Cloud Messaging</span>
+              <span>Notifications</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3: Flutter Digital Art Gallery -->
+        <div class="glass-card project-card">
+          <div class="project-img-wrapper">
+            <div class="project-image-counter">
+              <i class="fa-solid fa-images"></i> 2 Images
+            </div>
+            <img src="art%20gallery.png" alt="Flutter Digital Art Gallery Interface - Home Screen">
+            <div class="project-overlay" data-images="art%20gallery.png,art%20gallery2.png" data-title="Flutter Digital Art Gallery App">
+              <button class="project-zoom-btn" aria-label="Open Fullscreen Preview">
+                <i class="fa-solid fa-expand"></i>
+              </button>
+              <span class="project-overlay-text">CLICK TO ZOOM (2 IMAGES)</span>
+            </div>
+          </div>
+          <div class="project-info">
+            <span class="project-date">1 MAY 2026 - 26 MAY 2026</span>
+            <h3>Flutter Digital Art Gallery</h3>
+            <p>A modern app where artists and users explore, upload, and interact with artworks. Includes category searches, favorite bookmarks, live community comments, and AI-based auto-tagging for easy browsing.</p>
+            <div class="project-tags">
+              <span>Flutter</span>
+              <span>AI Tagging</span>
+              <span>Firestore</span>
+              <span>Community Portal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 4: Flutter Time Zone Pro -->
+        <div class="glass-card project-card">
+          <div class="project-img-wrapper">
+            <div class="project-image-counter">
+              <i class="fa-solid fa-images"></i> 2 Images
+            </div>
+            <img src="time%20zone.png" alt="Flutter Time Zone Pro Interface - Converter Screen">
+            <div class="project-overlay" data-images="time%20zone.png,time%20zone%202.png" data-title="Flutter Time Zone Pro App">
+              <button class="project-zoom-btn" aria-label="Open Fullscreen Preview">
+                <i class="fa-solid fa-expand"></i>
+              </button>
+              <span class="project-overlay-text">CLICK TO ZOOM (2 IMAGES)</span>
+            </div>
+          </div>
+          <div class="project-info">
+            <span class="project-date">1 MAY 2026 - 26 MAY 2026</span>
+            <h3>Flutter Time Zone Pro</h3>
+            <p>A smart app that helps users compare and convert global time zones easily. Features real-time offset synchronization, offline accessibility, integrated voice assistant support, and automatic daylight saving detection.</p>
+            <div class="project-tags">
+              <span>Flutter</span>
+              <span>Timezones API</span>
+              <span>Offline Mode</span>
+              <span>Voice Assistant</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       WORK EXPERIENCE SECTION
+       ========================================================================== -->
+  <section class="experience" id="experience">
+    <div class="container">
+      <div class="section-header">
+        <h2>Work Experience</h2>
+        <p>My professional and practical timeline in tech and media fields.</p>
+      </div>
+      
+      <div class="experience-timeline">
+        <!-- Job 1 -->
+        <div class="exp-item">
+          <div class="exp-dot"><i class="fa-solid fa-mobile-button" style="font-size: 0.75rem; color: var(--primary);"></i></div>
+          <div class="glass-card exp-content">
+            <div class="exp-header">
+              <div>
+                <h3>Mobile Application Developer Intern</h3>
+                <div class="exp-company">Arch Technologies</div>
+              </div>
+              <div class="exp-date">1 APR 2026 - 26 MAY 2026</div>
+            </div>
+            <ul class="exp-details">
+              <li>Worked on building and improving mobile applications, making sure they run smoothly and are easy to use.</li>
+              <li>Connected apps with online databases and APIs so that users could get real-time synced information.</li>
+              <li>Collaborated with team members, sharing ideas and solving coding problems together to deliver better results.</li>
+              <li>Spent time fixing bugs and optimizing rendering performance so the apps felt faster and more reliable.</li>
+              <li>Contributed to the design side, helping make the app interfaces more user-friendly and visually appealing.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Job 2 -->
+        <div class="exp-item">
+          <div class="exp-dot"><i class="fa-brands fa-youtube" style="font-size: 0.75rem; color: var(--primary);"></i></div>
+          <div class="glass-card exp-content">
+            <div class="exp-header">
+              <div>
+                <h3>Video Editor</h3>
+                <div class="exp-company">YouTube Channel</div>
+              </div>
+              <div class="exp-date">10 JUN 2025 - 12 AUG 2025</div>
+            </div>
+            <ul class="exp-details">
+              <li>Edited documentary-style videos, turning raw footage and recordings into polished, engaging visual stories.</li>
+              <li>Developed pacing rhythms, clean transitions, and color/sound enhancements to retain audience attention.</li>
+              <li>Optimized export profiles for YouTube, ensuring professional grade quality and compatibility with platform guidelines.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       HOBBIES & ADDITIONAL DETAILS SECTION
+       ========================================================================== -->
+  <section class="additional-info" id="additional">
+    <div class="container">
+      <div class="section-header">
+        <h2>Interests & Languages</h2>
+        <p>A quick overview of what drives my creativity and how I communicate.</p>
+      </div>
+      
+      <div class="about-grid">
+        <div class="glass-card" style="padding: 2.5rem;">
+          <h3 style="margin-bottom: 1.5rem; color: var(--primary);"><i class="fa-solid fa-heart" style="margin-right: 0.5rem;"></i> Hobbies & Interests</h3>
+          <ul class="exp-details" style="display: flex; flex-direction: column; gap: 1rem;">
+            <li>Building and experimenting with mobile apps that solve everyday problems.</li>
+            <li>Designing user interfaces with a focus on UI/UX principles and digital engagement.</li>
+            <li>Editing video sequences and creating digital content for engaging storytelling.</li>
+            <li>Exploring new tech trends like IoT, Blockchain, and AI through small testing prototypes.</li>
+          </ul>
+        </div>
+        
+        <div class="glass-card" style="padding: 2.5rem;">
+          <h3 style="margin-bottom: 1.5rem; color: var(--primary);"><i class="fa-solid fa-language" style="margin-right: 0.5rem;"></i> Language Skills</h3>
+          <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <div>
+              <h4 style="margin-bottom: 0.25rem;">Urdu</h4>
+              <p style="color: var(--text-muted); font-size: 0.95rem;">Mother tongue (Native proficiency)</p>
+            </div>
+            
+            <div>
+              <h4 style="margin-bottom: 0.5rem;">English (C1/C2 Proficient User)</h4>
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; font-size: 0.9rem;">
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 6px;">
+                  <strong style="color: var(--primary);">Reading:</strong> C1 Level
+                </div>
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 6px;">
+                  <strong style="color: var(--primary);">Listening:</strong> C2 Level
+                </div>
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 6px;">
+                  <strong style="color: var(--primary);">Writing:</strong> C2 Level
+                </div>
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 6px;">
+                  <strong style="color: var(--primary);">Speaking:</strong> A1/A2 Spoken
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       CONTACT SECTION
+       ========================================================================== -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <h2>Contact Me</h2>
+        <p>Let's collaborate! Feel free to reach out via email, phone, or LinkedIn.</p>
+      </div>
+      
+      <div class="contact-grid">
+        <div class="contact-info-wrapper">
+          <!-- Card Phone -->
+          <div class="glass-card contact-card">
+            <div class="contact-icon">
+              <i class="fa-solid fa-phone"></i>
+            </div>
+            <div class="contact-details">
+              <h4>Phone</h4>
+              <p><a href="tel:+923305174366">(+92) 3305174366</a></p>
+            </div>
+          </div>
+
+          <!-- Card Email -->
+          <div class="glass-card contact-card">
+            <div class="contact-icon">
+              <i class="fa-solid fa-envelope"></i>
+            </div>
+            <div class="contact-details">
+              <h4>Email</h4>
+              <p><a href="mailto:abdulhaseeb.cs.work@gmail.com">abdulhaseeb.cs.work@gmail.com</a></p>
+            </div>
+          </div>
+
+          <!-- Card Location -->
+          <div class="glass-card contact-card">
+            <div class="contact-icon">
+              <i class="fa-solid fa-location-dot"></i>
+            </div>
+            <div class="contact-details">
+              <h4>Location</h4>
+              <p>Wahcantt, Islamabad, Pakistan</p>
+            </div>
+          </div>
+
+          <!-- Socials -->
+          <div>
+            <h4>Social Channels</h4>
+            <div class="social-links">
+              <a href="https://www.linkedin.com/in/abdul-haseebworks/" target="_blank" class="social-btn" aria-label="LinkedIn Profile">
+                <i class="fa-brands fa-linkedin-in"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="glass-card contact-form">
+          <form id="portfolio-form" onsubmit="event.preventDefault(); alert('Message sent successfully! (Simulated contact submit)');">
+            <div class="form-group">
+              <label for="name">Your Name</label>
+              <input type="text" id="name" class="form-control" placeholder="Enter your name" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="form-email">Your Email</label>
+              <input type="email" id="form-email" class="form-control" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" class="form-control" placeholder="Project collaboration, internship, etc." required>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" class="form-control" placeholder="Write your message here..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 1rem; border: none; align-self: flex-start;">
+              <i class="fa-solid fa-paper-plane"></i> Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="logo">
+        <i class="fa-solid fa-code"></i> Haseeb<span>Portfolio</span>
+      </div>
+      <p class="footer-text">
+        &copy; <span id="current-year"></span> Abdul Haseeb. All Rights Reserved.
+      </p>
+      <p class="footer-credits">
+        Designed for GitHub Pages hosting with pure HTML, CSS, and JS.
+      </p>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       FULLSCREEN LIGHTBOX MODAL
+       ========================================================================== -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image Lightbox">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close Lightbox">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous Image">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    
+    <div class="lightbox-content-wrapper">
+      <img src="" alt="" class="lightbox-img" id="lightbox-img">
+      <div class="lightbox-caption" id="lightbox-caption">Project Title</div>
+      <div class="lightbox-counter" id="lightbox-counter">Image 1 of 2</div>
+    </div>
+    
+    <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next Image">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+  </div>
+
+  <!-- Link Javascript -->
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Projects | Abdul Haseeb Portfolio</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="All projects developed by Abdul Haseeb, Mobile Application and Flutter Developer.">
+  <meta name="keywords" content="Abdul Haseeb, Flutter, Android Developer, Mobile Apps, Projects Portfolio">
+  <meta name="author" content="Abdul Haseeb">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Link Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="projects-page">
+
+  <!-- ==========================================================================
+       HEADER & NAVIGATION
+       ========================================================================== -->
+  <header class="header" id="header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        <i class="fa-solid fa-code"></i> Haseeb<span>Portfolio</span>
+      </a>
+      
+      <div style="display: flex; gap: 1rem; align-items: center;">
+        <a href="#" id="nav-manager-link" class="btn btn-secondary" style="padding: 0.5rem 1.25rem; font-size: 0.9rem; border-radius: 30px; color: var(--primary);">
+          <i class="fa-solid fa-lock"></i> Manager
+        </a>
+        <a href="index.html" class="btn btn-secondary" style="padding: 0.5rem 1.25rem; font-size: 0.9rem; border-radius: 30px;">
+          <i class="fa-solid fa-arrow-left"></i> Back to Home
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       PROJECTS GRID SECTION
+       ========================================================================== -->
+  <section class="projects-section" style="padding-top: 120px; min-height: 85vh;">
+    <div class="container">
+      <div class="projects-header-container" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; flex-wrap: wrap; gap: 1.5rem;">
+        <div>
+          <h1 style="font-size: 2.5rem; background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">All My Projects</h1>
+          <p style="color: var(--text-muted); margin-top: 0.5rem;">Explore all applications, designs, and tools I have built.</p>
+        </div>
+      </div>
+      
+      <!-- Dynamic Projects Grid -->
+      <div id="projects-page-grid" class="projects-grid">
+        <!-- Rendered Dynamically via JS -->
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="logo">
+        <i class="fa-solid fa-code"></i> Haseeb<span>Portfolio</span>
+      </div>
+      <p class="footer-text">
+        &copy; <span id="current-year"></span> Abdul Haseeb. All Rights Reserved.
+      </p>
+      <p class="footer-credits">
+        Designed for GitHub Pages hosting with pure HTML, CSS, and JS.
+      </p>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       FULLSCREEN LIGHTBOX MODAL (FOR PREVIEWS)
+       ========================================================================== -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image Lightbox">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close Lightbox">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous Image">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    
+    <div class="lightbox-content-wrapper">
+      <img src="" alt="" class="lightbox-img" id="lightbox-img">
+      <div class="lightbox-caption" id="lightbox-caption">Project Title</div>
+      <div class="lightbox-counter" id="lightbox-counter">Image 1 of 2</div>
+    </div>
+    
+    <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next Image">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+  </div>
+
+  <!-- Link Javascript -->
+  <script src="script.js"></script>
+</body>
+</html>

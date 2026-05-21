@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manager Dashboard | Abdul Haseeb Portfolio</title>
+  
+  <!-- Blocking Authentication Check -->
+  <script>
+    (function() {
+      const code = sessionStorage.getItem('portfolio_admin');
+      if (code !== 'true') {
+        const userInput = prompt("Enter security code to access Manager Page:");
+        const storedCode = localStorage.getItem('portfolio_security_code') || 'AbdulHaseeb@786';
+        if (userInput && userInput.trim() === storedCode) {
+          sessionStorage.setItem('portfolio_admin', 'true');
+        } else {
+          alert("Access Denied!");
+          window.location.href = "index.html";
+        }
+      }
+    })();
+  </script>
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Link Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Dashboard Specific Styles -->
+  <style>
+    body {
+      background-attachment: fixed;
+    }
+    
+    .manager-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 2rem;
+      padding-top: 120px;
+      margin-bottom: 5rem;
+    }
+
+    @media (max-width: 992px) {
+      .manager-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .manager-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      height: fit-content;
+      position: sticky;
+      top: 100px;
+      z-index: 10;
+    }
+
+    .tab-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-family: var(--font-heading);
+      font-weight: 600;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: var(--transition);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      width: 100%;
+      outline: none;
+    }
+
+    .tab-btn:hover {
+      border-color: var(--border-hover);
+      color: var(--text-main);
+      background: var(--bg-card-hover);
+      transform: translateX(5px);
+    }
+
+    .tab-btn.active {
+      background: var(--gradient-main);
+      color: var(--bg-main);
+      border-color: transparent;
+      box-shadow: var(--shadow-neon);
+    }
+
+    .tab-btn.active i {
+      color: var(--bg-main);
+    }
+
+    .tab-btn i {
+      font-size: 1.1rem;
+      color: var(--primary);
+      transition: var(--transition);
+    }
+
+    .manager-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 1.25rem;
+      padding: 2.5rem;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      min-height: 600px;
+    }
+
+    @media (max-width: 600px) {
+      .manager-content {
+        padding: 1.5rem;
+      }
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .panel-header h2 {
+      font-size: 1.8rem;
+      background: var(--gradient-main);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .panel-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    /* Form Layouts */
+    .form-section-title {
+      font-size: 1.2rem;
+      margin: 2rem 0 1rem 0;
+      color: var(--primary);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-section-title:first-of-type {
+      margin-top: 0;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-family: var(--font-heading);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+      font-size: 0.95rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.85rem 1.2rem;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
+    }
+
+    textarea.form-control {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    /* Sub lists and direct list editors */
+    .list-editor-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .list-item-card {
+      background: rgba(2, 6, 23, 0.4);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .list-item-card:hover {
+      border-color: var(--border-hover);
+      background: rgba(15, 23, 42, 0.4);
+    }
+
+    .list-item-info {
+      flex-grow: 1;
+      overflow: hidden;
+    }
+
+    .list-item-info h4 {
+      font-size: 1.1rem;
+      margin-bottom: 0.25rem;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .list-item-info p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .list-item-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .editor-btn {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .btn-danger {
+      background: rgba(244, 63, 94, 0.1);
+      color: #f43f5e;
+      border: 1px solid rgba(244, 63, 94, 0.2);
+    }
+
+    .btn-danger:hover {
+      background: #f43f5e;
+      color: white;
+      box-shadow: 0 0 15px rgba(244, 63, 94, 0.3);
+    }
+
+    .btn-edit {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--primary);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    .btn-edit:hover {
+      background: var(--primary);
+      color: var(--bg-main);
+      box-shadow: var(--shadow-neon);
+    }
+
+    .btn-add-item {
+      margin-top: 1rem;
+      border-radius: 8px;
+      padding: 0.85rem;
+      font-weight: 600;
+      width: 100%;
+    }
+
+    /* Editable lists (like paragraphs, stats, hobbies) styling */
+    .row-flex {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }
+
+    .row-flex .form-control {
+      flex-grow: 1;
+    }
+
+    .row-flex button {
+      flex-shrink: 0;
+      padding: 0.85rem 1.2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    /* Social Item Editor Row (Responsive Cards) */
+    .social-item-row {
+      background: rgba(15, 23, 42, 0.4) !important;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      transition: var(--transition);
+    }
+
+    .social-item-row:hover {
+      border-color: var(--border-hover);
+      background: rgba(15, 23, 42, 0.6) !important;
+    }
+
+    .social-item-row > * {
+      flex: 1 1 auto;
+    }
+
+    .social-item-row select,
+    .social-item-row .social-platform-custom-input,
+    .social-item-row .social-icon-input {
+      max-width: 180px;
+      min-width: 130px;
+      height: 46px;
+    }
+
+    .social-item-row .social-url-input {
+      flex-grow: 3;
+      min-width: 200px;
+      height: 46px;
+    }
+
+    .social-item-row .social-icon-preview {
+      flex: 0 0 46px;
+      width: 46px;
+      height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(56, 189, 248, 0.05);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--primary);
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      box-shadow: inset 0 0 8px rgba(56, 189, 248, 0.05);
+      transition: var(--transition);
+    }
+
+    .social-item-row .social-icon-preview.active {
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    .social-item-row .btn-delete-social {
+      flex: 0 0 46px;
+      height: 46px;
+      width: 46px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .social-item-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+      }
+      .social-item-row select,
+      .social-item-row .social-platform-custom-input,
+      .social-item-row .social-icon-input,
+      .social-item-row .social-url-input {
+        max-width: 100%;
+        width: 100%;
+      }
+      .social-item-row-actions {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+      }
+      .social-item-row .social-icon-preview {
+        flex: 1;
+        width: auto;
+      }
+      .social-item-row .btn-delete-social {
+        flex: 1;
+        width: auto;
+      }
+    }
+
+    /* Profile Picture Editor */
+    .profile-pic-editor {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+      padding: 1.25rem;
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+    }
+
+    .profile-pic-preview {
+      flex-shrink: 0;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid var(--primary);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+    }
+
+    .profile-pic-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-pic-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      flex-grow: 1;
+    }
+
+    .profile-pic-controls > div:first-of-type {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .profile-pic-url-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    @media (max-width: 600px) {
+      .profile-pic-editor {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .profile-pic-controls > div:first-of-type {
+        justify-content: center;
+      }
+      .profile-pic-url-row {
+        flex-direction: column;
+      }
+    }
+
+    /* Password Input with toggle */
+    .password-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .password-input-wrapper .form-control {
+      padding-right: 3rem;
+    }
+
+    .password-toggle-btn {
+      position: absolute;
+      right: 0.75rem;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0.25rem;
+      transition: color 0.2s ease;
+    }
+
+    .password-toggle-btn:hover {
+      color: var(--primary);
+    }
+
+    /* Security Feedback */
+    .security-feedback {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .security-feedback.error {
+      background: rgba(244, 63, 94, 0.1);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      color: #f43f5e;
+    }
+
+    .security-feedback.success {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--primary);
+    }
+
+    /* Toast Save Notification */
+    .save-toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--primary);
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      box-shadow: var(--shadow-neon), 0 10px 30px rgba(0,0,0,0.5);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 2000;
+    }
+
+    .save-toast.active {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .save-toast i {
+      color: var(--primary);
+      font-size: 1.25rem;
+    }
+
+    /* Images Thumbnail List inside Project Modal */
+    .project-images-mgr {
+      background: rgba(2, 6, 23, 0.3);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .thumbs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .thumb-wrapper {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    .thumb-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .thumb-delete-btn {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 20px;
+      height: 20px;
+      background: rgba(244, 63, 94, 0.9);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      line-height: 1;
+      font-weight: bold;
+      transition: var(--transition);
+    }
+
+    .thumb-delete-btn:hover {
+      background: #f43f5e;
+      transform: scale(1.15);
+    }
+
+    /* Custom File Input button */
+    .file-input-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .file-input-wrapper input[type=file] {
+      font-size: 100px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      cursor: pointer;
+      height: 100%;
+      width: 100%;
+    }
+
+    /* Modal Form structure scrolling fix */
+    .modal-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-body {
+      overflow-y: auto;
+      margin-bottom: 1.5rem;
+      padding-right: 0.25rem;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      border-top: 1px solid var(--border-color);
+      padding-top: 1.5rem;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       HEADER & NAVIGATION
+       ========================================================================== -->
+  <header class="header" id="header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        <i class="fa-solid fa-code"></i> Haseeb<span>Portfolio</span> <span style="font-size: 0.85rem; font-weight: 500; border: 1px solid var(--primary); padding: 2px 8px; border-radius: 30px; margin-left: 0.5rem; background: rgba(56, 189, 248, 0.05); color: var(--primary); -webkit-text-fill-color: var(--primary);">Manager</span>
+      </a>
+      
+      <div style="display: flex; gap: 1rem; align-items: center;">
+        <button id="btn-reset-defaults" class="btn btn-secondary" style="padding: 0.5rem 1.25rem; font-size: 0.9rem; border-radius: 30px; border: 1px solid rgba(244, 63, 94, 0.3); color: #f43f5e; cursor: pointer; background: transparent;">
+          <i class="fa-solid fa-rotate-left"></i> Reset Defaults
+        </button>
+        <button id="btn-logout" class="btn btn-danger" style="padding: 0.5rem 1.25rem; font-size: 0.9rem; border-radius: 30px; cursor: pointer;">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+        <a href="index.html" class="btn btn-secondary" style="padding: 0.5rem 1.25rem; font-size: 0.9rem; border-radius: 30px;">
+          <i class="fa-solid fa-arrow-left"></i> Back to Site
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       MANAGER MAIN LAYOUT
+       ========================================================================== -->
+  <div class="container">
+    <div class="manager-layout">
+      <!-- SIDEBAR TABS -->
+      <aside class="manager-sidebar">
+        <button class="tab-btn active" data-tab="panel-hero" id="tab-btn-hero">
+          <i class="fa-solid fa-user"></i> Hero & Contact
+        </button>
+        <button class="tab-btn" data-tab="panel-about" id="tab-btn-about">
+          <i class="fa-solid fa-address-card"></i> About & Stats
+        </button>
+        <button class="tab-btn" data-tab="panel-skills" id="tab-btn-skills">
+          <i class="fa-solid fa-screwdriver-wrench"></i> Core Skills
+        </button>
+        <button class="tab-btn" data-tab="panel-projects" id="tab-btn-projects">
+          <i class="fa-solid fa-briefcase"></i> Featured Projects
+        </button>
+        <button class="tab-btn" data-tab="panel-experience" id="tab-btn-experience">
+          <i class="fa-solid fa-history"></i> Work Experience
+        </button>
+        <button class="tab-btn" data-tab="panel-interests" id="tab-btn-interests">
+          <i class="fa-solid fa-heart"></i> Hobbies & Languages
+        </button>
+        <button class="tab-btn" data-tab="panel-security" id="tab-btn-security">
+          <i class="fa-solid fa-shield-halved"></i> Security & Auth
+        </button>
+      </aside>
+      
+      <!-- CONTENT AREA -->
+      <main class="manager-content">
+        
+        <!-- ==========================================
+             PANEL 1: HERO & CONTACT
+             ========================================== -->
+        <div class="tab-panel active" id="panel-hero">
+          <div class="panel-header">
+            <h2>Hero & Contact Details</h2>
+            <div class="panel-actions">
+              <button class="btn btn-primary save-btn" data-form="form-hero" style="border:none; padding: 0.6rem 1.5rem; font-size: 0.9rem; cursor:pointer;">
+                <i class="fa-solid fa-floppy-disk"></i> Save Changes
+              </button>
+            </div>
+          </div>
+          
+          <form id="form-hero" onsubmit="event.preventDefault();">
+            <h3 class="form-section-title"><i class="fa-solid fa-camera"></i> Profile Picture</h3>
+            <p style="color: var(--text-muted); margin-bottom: 1rem; font-size: 0.9rem;">Upload, update, or remove your profile photo. This image appears in the hero section of your homepage.</p>
+            <div class="profile-pic-editor">
+              <div class="profile-pic-preview">
+                <img id="manager-avatar-preview" src="haseebimg.jpeg" alt="Profile Preview">
+              </div>
+              <div class="profile-pic-controls">
+                <input type="file" id="profile-pic-file-input" accept="image/*" style="display: none;">
+                <button type="button" id="btn-upload-profile-pic" class="btn btn-primary" style="border:none; padding: 0.6rem 1.25rem; font-size: 0.85rem; cursor:pointer; border-radius: 8px;">
+                  <i class="fa-solid fa-upload"></i> Upload Photo
+                </button>
+                <button type="button" id="btn-remove-profile-pic" class="btn btn-danger" style="padding: 0.6rem 1.25rem; font-size: 0.85rem; cursor:pointer; border-radius: 8px;">
+                  <i class="fa-solid fa-trash"></i> Remove
+                </button>
+                <div class="profile-pic-url-row">
+                  <input type="text" id="profile-pic-url-input" class="form-control" placeholder="Or enter image filename/URL..." style="flex-grow: 1;">
+                  <button type="button" id="btn-update-profile-pic-url" class="btn btn-edit" style="padding: 0.6rem 1.25rem; font-size: 0.85rem; cursor:pointer; border-radius: 8px; white-space: nowrap;">
+                    <i class="fa-solid fa-link"></i> Set URL
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <h3 class="form-section-title"><i class="fa-solid fa-desktop"></i> Hero Section Settings</h3>
+            
+            <div class="form-group">
+              <label for="hero-tag">Availability / Status Tag</label>
+              <input type="text" id="hero-tag" class="form-control" placeholder="e.g. Available for Internships">
+            </div>
+            
+            <div class="form-group">
+              <label for="hero-name">Display Name</label>
+              <input type="text" id="hero-name" class="form-control" placeholder="e.g. Abdul Haseeb">
+            </div>
+            
+            <div class="form-group">
+              <label for="hero-desc">Hero Description Paragraph</label>
+              <textarea id="hero-desc" class="form-control" placeholder="Describe your background and expertise..."></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="hero-typing">Typing Text Loop (One item per line)</label>
+              <textarea id="hero-typing" class="form-control" placeholder="e.g.&#10;Flutter Developer.&#10;Android Developer." style="min-height: 100px;"></textarea>
+              <span class="form-help-text">These lines will type out and cycle sequentially on the homepage.</span>
+            </div>
+
+            <h3 class="form-section-title"><i class="fa-solid fa-address-book"></i> Global Contact Details</h3>
+            
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="contact-phone">Phone Number</label>
+                <input type="text" id="contact-phone" class="form-control" placeholder="e.g. (+92) 3305174366">
+              </div>
+              <div class="form-group">
+                <label for="contact-email">Email Address</label>
+                <input type="email" id="contact-email" class="form-control" placeholder="e.g. name@example.com">
+              </div>
+            </div>
+            
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="contact-location">Location</label>
+                <input type="text" id="contact-location" class="form-control" placeholder="e.g. Wahcantt, Pakistan">
+              </div>
+              <div class="form-group">
+                <label for="contact-linkedin">LinkedIn URL</label>
+                <input type="url" id="contact-linkedin" class="form-control" placeholder="e.g. https://www.linkedin.com/in/...">
+              </div>
+            </div>
+
+            <h3 class="form-section-title"><i class="fa-solid fa-share-nodes"></i> Social Media Channels</h3>
+            <p style="color: var(--text-muted); margin-bottom: 1rem; font-size: 0.9rem;">Manage all the social media profiles displayed in the website footer/contact section.</p>
+            <div id="socials-list-container" class="list-editor-container" style="gap: 0.75rem; margin-bottom: 1rem;">
+              <!-- Rendered via JS -->
+            </div>
+            <button type="button" id="btn-add-social" class="btn btn-secondary" style="margin-top: 0.5rem; padding: 0.5rem 1rem; font-size: 0.85rem; width: auto; cursor:pointer; background:rgba(255,255,255,0.02); border-color:var(--border-color);">
+              <i class="fa-solid fa-plus"></i> Add Social Channel
+            </button>
+          </form>
+        </div>
+
+        <!-- ==========================================
+             PANEL 2: ABOUT & STATS
+             ========================================== -->
+        <div class="tab-panel" id="panel-about">
+          <div class="panel-header">
+            <h2>About Profile, Stats & Education</h2>
+            <div class="panel-actions">
+              <button class="btn btn-primary save-btn" data-form="form-about" style="border:none; padding: 0.6rem 1.5rem; font-size: 0.9rem; cursor:pointer;">
+                <i class="fa-solid fa-floppy-disk"></i> Save Changes
+              </button>
+            </div>
+          </div>
+          
+          <form id="form-about" onsubmit="event.preventDefault();">
+            <!-- Profile paragraphs -->
+            <h3 class="form-section-title"><i class="fa-solid fa-circle-info"></i> Profile Paragraphs</h3>
+            <div id="paragraphs-list-container">
+              <!-- Rendered via JS -->
+            </div>
+            <button type="button" id="btn-add-paragraph" class="btn btn-secondary" style="margin-top: 0.5rem; padding: 0.5rem 1rem; font-size: 0.85rem; width: auto; cursor:pointer; background:rgba(255,255,255,0.02); border-color:var(--border-color);">
+              <i class="fa-solid fa-plus"></i> Add Paragraph
+            </button>
+
+            <!-- Stats -->
+            <h3 class="form-section-title"><i class="fa-solid fa-chart-simple"></i> Numerical Stats Cards</h3>
+            <div id="stats-list-container">
+              <!-- Rendered via JS -->
+            </div>
+            <button type="button" id="btn-add-stat" class="btn btn-secondary" style="margin-top: 0.5rem; padding: 0.5rem 1rem; font-size: 0.85rem; width: auto; cursor:pointer; background:rgba(255,255,255,0.02); border-color:var(--border-color);">
+              <i class="fa-solid fa-plus"></i> Add Stat Card
+            </button>
+
+            <!-- Education timeline -->
+            <h3 class="form-section-title"><i class="fa-solid fa-graduation-cap"></i> Education Timeline</h3>
+            <div class="list-editor-container" id="education-list-container">
+              <!-- Rendered via JS -->
+            </div>
+            <button type="button" id="btn-add-education" class="btn btn-secondary btn-add-item" style="cursor:pointer; background:rgba(56, 189, 248, 0.05); border-color:var(--border-color); color:var(--primary);">
+              <i class="fa-solid fa-plus"></i> Add New Academic Entry
+            </button>
+          </form>
+        </div>
+
+        <!-- ==========================================
+             PANEL 3: SKILLS
+             ========================================== -->
+        <div class="tab-panel" id="panel-skills">
+          <div class="panel-header">
+            <h2>Core Skills Cards</h2>
+          </div>
+          
+          <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.95rem;">Manage the skills grid displayed on the homepage. You can configure icons, titles, and descriptions.</p>
+          
+          <div class="list-editor-container" id="skills-list-container">
+            <!-- Rendered via JS -->
+          </div>
+          
+          <button type="button" id="btn-add-skill" class="btn btn-secondary btn-add-item" style="cursor:pointer; background:rgba(56, 189, 248, 0.05); border-color:var(--border-color); color:var(--primary);">
+            <i class="fa-solid fa-plus"></i> Add New Skill Card
+          </button>
+        </div>
+
+        <!-- ==========================================
+             PANEL 4: PROJECTS
+             ========================================== -->
+        <div class="tab-panel" id="panel-projects">
+          <div class="panel-header">
+            <h2>Featured Projects Catalog</h2>
+            <div class="panel-actions">
+              <button type="button" id="btn-add-project" class="btn btn-primary" style="border:none; padding: 0.6rem 1.5rem; font-size: 0.9rem; cursor:pointer;">
+                <i class="fa-solid fa-plus"></i> Add New Project
+              </button>
+            </div>
+          </div>
+          
+          <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.95rem;">Add, edit, or delete items in your project catalog. These items appear on both the home page (first 3 items) and the full projects page.</p>
+          
+          <div class="list-editor-container" id="projects-list-container">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+        <!-- ==========================================
+             PANEL 5: WORK EXPERIENCE
+             ========================================== -->
+        <div class="tab-panel" id="panel-experience">
+          <div class="panel-header">
+            <h2>Professional Experience Timeline</h2>
+          </div>
+          
+          <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.95rem;">Add and edit past jobs or internships. You can provide bulleted achievement lists for each entry.</p>
+          
+          <div class="list-editor-container" id="experience-list-container">
+            <!-- Rendered via JS -->
+          </div>
+          
+          <button type="button" id="btn-add-experience" class="btn btn-secondary btn-add-item" style="cursor:pointer; background:rgba(56, 189, 248, 0.05); border-color:var(--border-color); color:var(--primary);">
+            <i class="fa-solid fa-plus"></i> Add New Work History
+          </button>
+        </div>
+
+        <!-- ==========================================
+             PANEL 6: INTERESTS & LANGUAGES
+             ========================================== -->
+        <div class="tab-panel" id="panel-interests">
+          <div class="panel-header">
+            <h2>Hobbies & Language Skills</h2>
+            <div class="panel-actions">
+              <button class="btn btn-primary save-btn" data-form="form-interests" style="border:none; padding: 0.6rem 1.5rem; font-size: 0.9rem; cursor:pointer;">
+                <i class="fa-solid fa-floppy-disk"></i> Save Changes
+              </button>
+            </div>
+          </div>
+          
+          <form id="form-interests" onsubmit="event.preventDefault();">
+            <!-- Hobbies -->
+            <h3 class="form-section-title"><i class="fa-solid fa-heart"></i> Hobbies & Interests</h3>
+            <div id="hobbies-list-container">
+              <!-- Rendered via JS -->
+            </div>
+            <button type="button" id="btn-add-hobby" class="btn btn-secondary" style="margin-top: 0.5rem; padding: 0.5rem 1rem; font-size: 0.85rem; width: auto; cursor:pointer; background:rgba(255,255,255,0.02); border-color:var(--border-color);">
+              <i class="fa-solid fa-plus"></i> Add Hobby
+            </button>
+
+            <!-- Native Language -->
+            <h3 class="form-section-title"><i class="fa-solid fa-language"></i> Native Language</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="lang-native-name">Language Name</label>
+                <input type="text" id="lang-native-name" class="form-control" placeholder="e.g. Urdu">
+              </div>
+              <div class="form-group">
+                <label for="lang-native-desc">Description / Proficiency</label>
+                <input type="text" id="lang-native-desc" class="form-control" placeholder="e.g. Mother tongue (Native)">
+              </div>
+            </div>
+
+            <!-- English Language -->
+            <h3 class="form-section-title"><i class="fa-solid fa-globe"></i> Second Language Settings</h3>
+            <div class="form-group">
+              <label for="lang-english-name">Language Name & General Status</label>
+              <input type="text" id="lang-english-name" class="form-control" placeholder="e.g. English (C1/C2 Proficient)">
+            </div>
+            
+            <label style="display: block; font-family: var(--font-heading); font-weight: 500; margin-bottom: 0.5rem; color: var(--text-main); font-size: 0.95rem;">Proficiency Grid Breakdown</label>
+            <div class="form-grid" style="margin-bottom: 0.5rem;">
+              <div class="form-group">
+                <label for="lang-level-reading">Reading Level</label>
+                <input type="text" id="lang-level-reading" class="form-control" placeholder="e.g. C1 Level">
+              </div>
+              <div class="form-group">
+                <label for="lang-level-listening">Listening Level</label>
+                <input type="text" id="lang-level-listening" class="form-control" placeholder="e.g. C2 Level">
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="lang-level-writing">Writing Level</label>
+                <input type="text" id="lang-level-writing" class="form-control" placeholder="e.g. C2 Level">
+              </div>
+              <div class="form-group">
+                <label for="lang-level-speaking">Speaking Level</label>
+                <input type="text" id="lang-level-speaking" class="form-control" placeholder="e.g. A1/A2 Spoken">
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- ==========================================
+             PANEL 7: SECURITY & AUTH
+             ========================================== -->
+        <div class="tab-panel" id="panel-security">
+          <div class="panel-header">
+            <h2>Security & Authentication</h2>
+          </div>
+          
+          <form id="form-security" onsubmit="event.preventDefault();">
+            <h3 class="form-section-title"><i class="fa-solid fa-key"></i> Change Security Password</h3>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">Update the password required to access the Manager dashboard. You must enter your current password to make any changes.</p>
+            
+            <div class="form-group">
+              <label for="security-old-password">Current Password</label>
+              <div class="password-input-wrapper">
+                <input type="password" id="security-old-password" class="form-control" placeholder="Enter your current password" required autocomplete="off">
+                <button type="button" class="password-toggle-btn" data-target="security-old-password" title="Show/Hide">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="security-new-password">New Password</label>
+              <div class="password-input-wrapper">
+                <input type="password" id="security-new-password" class="form-control" placeholder="Enter a new password (min 4 characters)" required autocomplete="off">
+                <button type="button" class="password-toggle-btn" data-target="security-new-password" title="Show/Hide">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="security-confirm-password">Confirm New Password</label>
+              <div class="password-input-wrapper">
+                <input type="password" id="security-confirm-password" class="form-control" placeholder="Re-enter the new password" required autocomplete="off">
+                <button type="button" class="password-toggle-btn" data-target="security-confirm-password" title="Show/Hide">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div id="security-password-feedback" style="margin-bottom: 1rem;"></div>
+
+            <button type="button" id="btn-update-password" class="btn btn-primary" style="border:none; padding: 0.75rem 2rem; font-size: 0.95rem; cursor:pointer; border-radius: 8px; width: 100%;">
+              <i class="fa-solid fa-shield-halved"></i> Update Password
+            </button>
+          </form>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 1: GENERIC ITEM EDITOR MODAL (Skills, Education, Experience)
+       ========================================================================== -->
+  <div class="modal-overlay" id="item-modal" role="dialog" aria-modal="true">
+    <div class="modal-content glass-card" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 id="item-modal-title">Edit Item</h3>
+        <button type="button" class="modal-close" id="btn-close-item-modal">&times;</button>
+      </div>
+      
+      <form id="form-item-modal" onsubmit="event.preventDefault();">
+        <div class="modal-body">
+          <input type="hidden" id="item-type">
+          <input type="hidden" id="item-index" value="-1">
+          
+          <!-- Field 1: Title (Active for: skill, education, experience) -->
+          <div class="form-group" id="group-item-title">
+            <label for="item-title" id="label-item-title">Title / Role</label>
+            <input type="text" id="item-title" class="form-control" required>
+          </div>
+          
+          <!-- Field 2: Subtitle / Company / Institution (Active for: education, experience) -->
+          <div class="form-group" id="group-item-subtitle">
+            <label for="item-subtitle" id="label-item-subtitle">Institution / Company</label>
+            <input type="text" id="item-subtitle" class="form-control">
+          </div>
+          
+          <!-- Field 3: Date Period (Active for: education, experience) -->
+          <div class="form-group" id="group-item-date">
+            <label for="item-date">Date Range / Duration</label>
+            <input type="text" id="item-date" class="form-control" placeholder="e.g. Dec 2025 - Jan 2026">
+          </div>
+          
+          <!-- Field 4: FontAwesome Icon (Active for: skill, experience) -->
+          <div class="form-group" id="group-item-icon">
+            <label for="item-icon">FontAwesome Icon Class</label>
+            <input type="text" id="item-icon" class="form-control" placeholder="e.g. fa-brands fa-android">
+            <span class="form-help-text">Find icons at fontawesome.com (e.g. "fa-solid fa-code").</span>
+          </div>
+          
+          <!-- Field 5: Description Textarea (Active for: skill, education) -->
+          <div class="form-group" id="group-item-desc">
+            <label for="item-desc">Description</label>
+            <textarea id="item-desc" class="form-control" placeholder="Write a short summary..."></textarea>
+          </div>
+          
+          <!-- Field 6: Achievements / Details Textarea (Active for: experience) -->
+          <div class="form-group" id="group-item-bullets">
+            <label for="item-bullets">Work Details / Key Achievements (One item per line)</label>
+            <textarea id="item-bullets" class="form-control" placeholder="e.g.&#10;Worked on building mobile applications.&#10;Connected apps with databases."></textarea>
+            <span class="form-help-text">Press Enter to separate achievements. They will render as a bulleted list.</span>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-item-modal" style="width: auto; cursor:pointer;">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-item-modal" style="width: auto; cursor:pointer; border:none;">Save Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 2: PROJECT EDITOR MODAL
+       ========================================================================== -->
+  <div class="modal-overlay" id="project-modal" role="dialog" aria-modal="true">
+    <div class="modal-content glass-card">
+      <div class="modal-header">
+        <h3 id="project-modal-title">Add Project</h3>
+        <button type="button" class="modal-close" id="btn-close-project-modal">&times;</button>
+      </div>
+      
+      <form id="form-project-modal" onsubmit="event.preventDefault();">
+        <div class="modal-body">
+          <input type="hidden" id="project-index" value="-1">
+          
+          <div class="form-group">
+            <label for="project-title">Project Title</label>
+            <input type="text" id="project-title" class="form-control" placeholder="e.g. Flutter E-Commerce" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="project-date">Date / Development Period</label>
+            <input type="text" id="project-date" class="form-control" placeholder="e.g. 1 APR 2026 - 30 APR 2026" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="project-desc">Description</label>
+            <textarea id="project-desc" class="form-control" placeholder="Brief explanation of the project features, systems, and logic..." required></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="project-tags">Technologies / Tags (Comma separated)</label>
+            <input type="text" id="project-tags" class="form-control" placeholder="e.g. Flutter, Dart, REST API, Firebase" required>
+          </div>
+          
+          <!-- Image Management Widget -->
+          <div class="form-group">
+            <label>Project Cover Images</label>
+            <div class="project-images-mgr">
+              <div class="image-input-options">
+                <label class="image-option-card" for="project-file-upload" style="cursor: pointer;">
+                  <div class="file-upload-label">
+                    <i class="fa-solid fa-cloud-arrow-up" style="color: var(--primary); font-size: 1.25rem;"></i>
+                    <span>Upload Image File</span>
+                    <input type="file" id="project-file-upload" accept="image/*" multiple style="display: none;">
+                  </div>
+                </label>
+                
+                <div class="image-option-card" onclick="document.getElementById('project-img-url-input').focus();">
+                  <i class="fa-solid fa-link" style="color: var(--primary); font-size: 1.25rem; margin-bottom: 0.25rem;"></i>
+                  <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-muted);">Add Image by URL</span>
+                </div>
+              </div>
+              
+              <div class="row-flex" style="margin-top: 0.5rem; margin-bottom: 0;">
+                <input type="text" id="project-img-url-input" class="form-control" placeholder="Paste image URL here..." style="padding: 0.6rem 1rem; font-size: 0.85rem;">
+                <button type="button" id="btn-add-img-url" class="btn btn-secondary" style="padding: 0.6rem 1rem; font-size: 0.85rem; border-radius: 8px; cursor: pointer; width: auto;">Add</button>
+              </div>
+              
+              <div class="thumbs-grid" id="project-thumbs-container">
+                <!-- Image thumbnails with remove button -->
+              </div>
+            </div>
+            <span class="form-help-text">You can upload image files (converted to offline Base64 URLs) or paste online/relative links (e.g. 'e commerce.png'). Rearrange or delete images directly. Click cover zoom on portfolio to cycle them.</span>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-project-modal" style="width: auto; cursor:pointer;">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-project-modal" style="width: auto; cursor:pointer; border:none;">Save Project</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="logo">
+        <i class="fa-solid fa-code"></i> Haseeb<span>Portfolio</span>
+      </div>
+      <p class="footer-text">
+        &copy; <span id="current-year"></span> Abdul Haseeb. All Rights Reserved.
+      </p>
+      <p class="footer-credits">
+        Portfolio Manager Administrative Dashboard panel. Secure session active.
+      </p>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       TOAST NOTIFICATION FOR SAVE INDICATIONS
+       ========================================================================== -->
+  <div class="save-toast" id="save-toast">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="save-toast-message">Changes saved successfully!</span>
+  </div>
+
+  <!-- Link Javascript -->
+  <script src="manager.js"></script>
+</body>
+</html>

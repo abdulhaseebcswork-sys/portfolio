@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Certifications | Abdul Haseeb Portfolio</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="All certifications and credentials earned by Abdul Haseeb, Mobile Application and Flutter Developer.">
+  <meta name="keywords" content="Abdul Haseeb, Flutter, Android Developer, Certifications, Credentials, Resume">
+  <meta name="author" content="Abdul Haseeb">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Link Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="projects-page">
+
+  <!-- ==========================================================================
+       HEADER & NAVIGATION
+       ========================================================================== -->
+  <header class="header" id="header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        <i class="fa-solid fa-code"></i> Haseeb<span>Portfolio</span>
+      </a>
+      
+      <div style="display: flex; gap: 1rem; align-items: center;">
+        <a href="#" id="nav-manager-link" class="btn btn-secondary" style="padding: 0.5rem 1.25rem; font-size: 0.9rem; border-radius: 30px; color: var(--primary);">
+          <i class="fa-solid fa-lock"></i> Manager
+        </a>
+        <a href="index.html" class="btn btn-secondary" style="padding: 0.5rem 1.25rem; font-size: 0.9rem; border-radius: 30px;">
+          <i class="fa-solid fa-arrow-left"></i> Back to Home
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       CERTIFICATES GRID SECTION
+       ========================================================================== -->
+  <section class="projects-section" style="padding-top: 120px; min-height: 85vh;">
+    <div class="container">
+      <div class="projects-header-container" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; flex-wrap: wrap; gap: 1.5rem;">
+        <div>
+          <h1 style="font-size: 2.5rem; background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">My Certifications</h1>
+          <p style="color: var(--text-muted); margin-top: 0.5rem;">Credentials and specialized training achievements earned in app development and computing.</p>
+        </div>
+      </div>
+      
+      <!-- Dynamic Certificates Grid -->
+      <div id="certificates-page-grid" class="projects-grid">
+        <!-- Rendered Dynamically via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="logo">
+        <i class="fa-solid fa-code"></i> Haseeb<span>Portfolio</span>
+      </div>
+      <p class="footer-text">
+        &copy; <span id="current-year"></span> Abdul Haseeb. All Rights Reserved.
+      </p>
+      <p class="footer-credits">
+        Designed for GitHub Pages hosting with pure HTML, CSS, and JS.
+      </p>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       FULLSCREEN LIGHTBOX MODAL (FOR PREVIEWS)
+       ========================================================================== -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image Lightbox">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close Lightbox">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous Image">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    
+    <div class="lightbox-content-wrapper">
+      <img src="" alt="" class="lightbox-img" id="lightbox-img">
+      <div class="lightbox-caption" id="lightbox-caption">Certificate Title</div>
+      <div class="lightbox-counter" id="lightbox-counter">Certificate 1 of 1</div>
+    </div>
+    
+    <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next Image">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+  </div>
+
+  <!-- Link Javascript -->
+  <script src="script.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      function renderCertificatesPage() {
+        const certificates = JSON.parse(localStorage.getItem('portfolio_certificates')) || [];
+        const grid = document.getElementById('certificates-page-grid');
+        if (!grid) return;
+
+        if (certificates.length === 0) {
+          grid.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: rgba(255,255,255,0.01); border: 1px dashed var(--border-color); border-radius: 18px; color: var(--text-muted);">
+              <i class="fa-solid fa-certificate" style="font-size: 3.5rem; margin-bottom: 20px; color: var(--primary); opacity: 0.7;"></i>
+              <h3 style="color: white; font-size: 1.3rem; margin-bottom: 8px;">No certifications added yet</h3>
+              <p style="font-size: 0.95rem;">Upload certifications in your Manager dashboard panel to display them here.</p>
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = certificates.map((cert, index) => `
+          <div class="glass-card project-card reveal-item revealed" style="transition: transform var(--transition), box-shadow var(--transition);">
+            <div class="project-img-wrapper" style="height: 220px; overflow: hidden; background: rgba(0,0,0,0.25);">
+              <img src="${cert.image}" alt="${cert.title} Credential" style="width:100%; height:100%; object-fit:contain;">
+              <div class="project-overlay" data-image="${cert.image}" data-title="${cert.title}" style="cursor:pointer;">
+                <button class="project-zoom-btn" aria-label="Open Fullscreen Preview">
+                  <i class="fa-solid fa-expand"></i>
+                </button>
+                <span class="project-overlay-text">CLICK TO ZOOM</span>
+              </div>
+            </div>
+            <div class="project-info">
+              <span class="project-date" style="display: flex; align-items: center; gap: 0.4rem; color: var(--primary); font-weight: 500; font-size: 0.85rem;">
+                <i class="fa-solid fa-award"></i> Verified Credential
+              </span>
+              <h3 style="margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1.25rem;">${cert.title}</h3>
+              <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin:0;">Issued by ${cert.issuer}</p>
+            </div>
+          </div>
+        `).join('');
+
+        // Bind zoom clicks
+        grid.querySelectorAll('.project-overlay').forEach(overlay => {
+          overlay.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const img = overlay.getAttribute('data-image');
+            const title = overlay.getAttribute('data-title');
+            zoomCert(img, title);
+          });
+        });
+      }
+
+      function zoomCert(imgSrc, title) {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+        const lightboxCounter = document.getElementById('lightbox-counter');
+        const lightboxPrev = document.getElementById('lightbox-prev');
+        const lightboxNext = document.getElementById('lightbox-next');
+
+        if (lightbox && lightboxImg) {
+          lightboxImg.src = imgSrc;
+          lightboxImg.alt = title;
+          if (lightboxCaption) lightboxCaption.textContent = title;
+          if (lightboxCounter) lightboxCounter.textContent = "Credential Preview";
+          if (lightboxPrev) lightboxPrev.classList.add('hidden');
+          if (lightboxNext) lightboxNext.classList.add('hidden');
+
+          lightbox.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      renderCertificatesPage();
+    });
+  </script>
+</body>
+</html>

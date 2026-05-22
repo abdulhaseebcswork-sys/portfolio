@@ -35,6 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (activePanel) {
         activePanel.classList.add('active');
       }
+
+      // Render messages list dynamically if switching to the messages tab
+      if (targetTab === 'panel-messages') {
+        renderMessagesList();
+      }
     });
   });
 
@@ -1536,6 +1541,201 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ==========================================================================
+  // CONTACT MESSAGES MANAGEMENT (LOCAL STORAGE BACKUP INBOX)
+  // ==========================================================================
+
+  const MESSAGES_KEY = 'portfolio_messages';
+  const messagesContainer = document.getElementById('messages-list-container');
+  const btnClearAllMessages = document.getElementById('btn-clear-all-messages');
+  const messagesBadge = document.getElementById('messages-counter-badge');
+
+  function updateMessagesBadge(count) {
+    if (!messagesBadge) return;
+    if (count > 0) {
+      messagesBadge.textContent = count;
+      messagesBadge.style.display = 'inline-block';
+    } else {
+      messagesBadge.style.display = 'none';
+    }
+  }
+
+  function renderMessagesList() {
+    if (!messagesContainer) return;
+
+    const messages = JSON.parse(localStorage.getItem(MESSAGES_KEY) || '[]');
+    updateMessagesBadge(messages.length);
+
+    // Empty inbox state
+    if (messages.length === 0) {
+      messagesContainer.innerHTML = `
+        <div style="
+          text-align: center;
+          padding: 4rem 2rem;
+          background: rgba(15,23,42,0.3);
+          border: 1px dashed var(--border-color);
+          border-radius: 16px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 1rem;
+        ">
+          <div style="
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            background: rgba(56,189,248,0.07);
+            border: 1px solid rgba(56,189,248,0.15);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; color: var(--primary);
+          ">
+            <i class="fa-solid fa-inbox"></i>
+          </div>
+          <h3 style="color: var(--text-main); font-size: 1.15rem;">Inbox is Empty</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 380px;">
+            No contact form submissions received yet. When visitors fill out the contact form on your portfolio, their messages will appear here as a secure local backup.
+          </p>
+        </div>
+      `;
+      return;
+    }
+
+    // Render message cards
+    messagesContainer.innerHTML = messages.map((msg, index) => `
+      <div class="msg-card" data-index="${index}" style="
+        background: rgba(15,23,42,0.45);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      ">
+        <!-- Top accent glow line -->
+        <div style="
+          position: absolute; top: 0; left: 0; right: 0;
+          height: 2px;
+          background: var(--gradient-main);
+          border-radius: 16px 16px 0 0;
+          opacity: 0.6;
+        "></div>
+
+        <!-- Card Header: Name + Date + Delete -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div style="
+              width: 42px; height: 42px; border-radius: 50%;
+              background: var(--gradient-main);
+              display: flex; align-items: center; justify-content: center;
+              font-size: 1.1rem; color: var(--bg-main);
+              font-weight: 700; flex-shrink: 0;
+              font-family: var(--font-heading);
+            ">${(msg.name || '?').charAt(0).toUpperCase()}</div>
+            <div>
+              <div style="font-weight: 700; font-size: 1.05rem; color: var(--text-main);">${msg.name || 'Unknown Sender'}</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">${msg.date || 'No date'}</div>
+            </div>
+          </div>
+          <button class="btn-delete-msg editor-btn btn-danger" data-index="${index}" title="Delete this message" style="
+            flex-shrink: 0; padding: 0.4rem 0.85rem; font-size: 0.8rem; border-radius: 8px; cursor: pointer;
+          ">
+            <i class="fa-solid fa-trash"></i> Delete
+          </button>
+        </div>
+
+        <!-- Contact Meta Row -->
+        <div style="
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+          gap: 0.6rem;
+        ">
+          <a href="mailto:${msg.email || ''}" style="
+            display: flex; align-items: center; gap: 0.5rem;
+            background: rgba(56,189,248,0.05);
+            border: 1px solid rgba(56,189,248,0.12);
+            border-radius: 8px; padding: 0.5rem 0.85rem;
+            color: var(--primary); font-size: 0.85rem;
+            text-decoration: none; transition: background 0.2s ease;
+          ">
+            <i class="fa-solid fa-envelope" style="flex-shrink:0; opacity:0.8;"></i>
+            <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${msg.email || 'No email'}</span>
+          </a>
+          ${msg.phone ? `
+          <a href="tel:${msg.phone}" style="
+            display: flex; align-items: center; gap: 0.5rem;
+            background: rgba(56,189,248,0.05);
+            border: 1px solid rgba(56,189,248,0.12);
+            border-radius: 8px; padding: 0.5rem 0.85rem;
+            color: var(--primary); font-size: 0.85rem;
+            text-decoration: none; transition: background 0.2s ease;
+          ">
+            <i class="fa-solid fa-phone" style="flex-shrink:0; opacity:0.8;"></i>
+            <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${msg.phone}</span>
+          </a>` : ''}
+          ${msg.address ? `
+          <div style="
+            display: flex; align-items: center; gap: 0.5rem;
+            background: rgba(56,189,248,0.05);
+            border: 1px solid rgba(56,189,248,0.12);
+            border-radius: 8px; padding: 0.5rem 0.85rem;
+            color: var(--text-muted); font-size: 0.85rem;
+          ">
+            <i class="fa-solid fa-location-dot" style="flex-shrink:0; color: var(--primary); opacity:0.8;"></i>
+            <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${msg.address}</span>
+          </div>` : ''}
+        </div>
+
+        <!-- Message Body -->
+        ${msg.message ? `
+        <div style="
+          background: rgba(2,6,23,0.35);
+          border: 1px solid var(--border-color);
+          border-radius: 10px;
+          padding: 1rem 1.25rem;
+        ">
+          <div style="
+            font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em;
+            color: var(--primary); text-transform: uppercase; margin-bottom: 0.6rem;
+          "><i class="fa-solid fa-comment-dots" style="margin-right: 0.35rem;"></i> Message</div>
+          <p style="color: var(--text-main); font-size: 0.9rem; line-height: 1.7; margin: 0; white-space: pre-wrap;">${msg.message}</p>
+        </div>` : ''}
+      </div>
+    `).join('');
+
+    // Bind single delete buttons
+    messagesContainer.querySelectorAll('.btn-delete-msg').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const index = parseInt(btn.getAttribute('data-index'));
+        const msgs = JSON.parse(localStorage.getItem(MESSAGES_KEY) || '[]');
+        msgs.splice(index, 1);
+        localStorage.setItem(MESSAGES_KEY, JSON.stringify(msgs));
+        renderMessagesList();
+        showToast('Message deleted.');
+      });
+    });
+  }
+
+  // Clear All Messages button
+  if (btnClearAllMessages) {
+    btnClearAllMessages.addEventListener('click', () => {
+      const msgs = JSON.parse(localStorage.getItem(MESSAGES_KEY) || '[]');
+      if (msgs.length === 0) {
+        showToast('No messages to clear.', true);
+        return;
+      }
+      if (confirm(`Are you sure you want to permanently delete all ${msgs.length} contact message(s)? This cannot be undone.`)) {
+        localStorage.removeItem(MESSAGES_KEY);
+        renderMessagesList();
+        showToast('All messages cleared.');
+      }
+    });
+  }
+
   // Load it all on boot
   loadFormData();
+  // Initialise badge counter on page load
+  const _initMsgs = JSON.parse(localStorage.getItem(MESSAGES_KEY) || '[]');
+  updateMessagesBadge(_initMsgs.length);
 });

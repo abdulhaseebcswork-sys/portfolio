@@ -155,11 +155,15 @@
               <span class="stat-num">4+</span>
               <p class="stat-label">Complex Apps Built</p>
             </div>
-            <div class="glass-card stat-item reveal-item">
-              <span class="stat-num">3+</span>
+            <div class="glass-card stat-item reveal-item" id="certificates-card" style="cursor:pointer;">
+              <span class="stat-num" id="cert-count">3+</span>
               <p class="stat-label">Certifications Earned</p>
+              <small style="color: var(--primary); display:block; margin-top:8px;">Click to View</small>
             </div>
           </div>
+
+          <!-- Featured Certificate Container -->
+          <div id="featured-certificate-container" class="reveal-item" style="margin-top: 2rem;"></div>
         </div>
         
         <div>
@@ -448,31 +452,61 @@
 
         <!-- Contact Form -->
         <div class="glass-card contact-form reveal-item reveal-delay-1">
-          <form id="portfolio-form" onsubmit="event.preventDefault(); alert('Message sent successfully! (Simulated contact submit)');">
-            <div class="form-group">
-              <label for="name">Your Name</label>
-              <input type="text" id="name" class="form-control" placeholder="Enter your name" required>
-            </div>
-            
-            <div class="form-group">
-              <label for="form-email">Your Email</label>
-              <input type="email" id="form-email" class="form-control" placeholder="Enter your email" required>
+          <div class="contact-form-header" style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+            <h3 style="color: var(--primary); margin: 0; font-size: 1.3rem;"><i class="fa-solid fa-paper-plane" style="margin-right: 0.5rem;"></i> Send a Message</h3>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfu4I7Qq9L1tViIGDm6NCTyIUR5VJyOx3H_PYCnPzOfSz0Qbw/viewform" target="_blank" class="direct-form-link" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem; transition: color 0.3s ease;">
+              <span>Open in Google Forms</span> <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.75rem;"></i>
+            </a>
+          </div>
+
+          <!-- Hidden Iframe to handle form submission without leaving page -->
+          <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
+          <form id="portfolio-form" action="https://docs.google.com/forms/d/e/1FAIpQLSfu4I7Qq9L1tViIGDm6NCTyIUR5VJyOx3H_PYCnPzOfSz0Qbw/formResponse" method="POST" target="hidden_iframe">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="entry.2005620554" class="form-control" placeholder="Enter your name" required>
+              </div>
+              
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="form-email">Your Email</label>
+                <input type="email" id="form-email" name="entry.1045781291" class="form-control" placeholder="Enter your email" required>
+              </div>
             </div>
 
-            <div class="form-group">
-              <label for="subject">Subject</label>
-              <input type="text" id="subject" class="form-control" placeholder="Project collaboration, internship, etc." required>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="form-phone">Phone Number</label>
+                <input type="tel" id="form-phone" name="entry.1166974658" class="form-control" placeholder="e.g. +92 330 5174366" required>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="form-address">Address / Subject</label>
+                <input type="text" id="form-address" name="entry.1065046570" class="form-control" placeholder="e.g. Wahcantt, Pakistan" required>
+              </div>
             </div>
 
             <div class="form-group">
               <label for="message">Message</label>
-              <textarea id="message" class="form-control" placeholder="Write your message here..." required></textarea>
+              <textarea id="message" name="entry.839337160" class="form-control" placeholder="Write your message here..." style="min-height: 120px;" required></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="margin-top: 1rem; border: none; align-self: flex-start;">
+            <button type="submit" id="contact-submit-btn" class="btn btn-primary" style="margin-top: 0.5rem; border: none; align-self: flex-start;">
               <i class="fa-solid fa-paper-plane"></i> Send Message
             </button>
           </form>
+
+          <!-- Custom toast notification container -->
+          <div id="contact-toast" class="contact-toast" style="display: none;">
+            <div class="toast-content">
+              <i class="fa-solid fa-circle-check toast-icon"></i>
+              <div class="toast-message">
+                <strong>Message Sent!</strong>
+                <p>Thank you. Your message has been successfully recorded.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -517,6 +551,127 @@
       <i class="fa-solid fa-chevron-right"></i>
     </button>
   </div>
+
+
+  <script>
+    const defaultCertificates = [
+      {
+        title: "Introduction to AI",
+        issuer: "The Open University",
+        image: "https://placehold.co/800x600/071120/38bdf8?text=AI+Certificate"
+      },
+      {
+        title: "App Development with Flutter",
+        issuer: "Cipher Schools",
+        image: "https://placehold.co/800x600/071120/38bdf8?text=Flutter+Certificate"
+      },
+      {
+        title: "Android Development",
+        issuer: "Professional Training",
+        image: "https://placehold.co/800x600/071120/38bdf8?text=Android+Certificate"
+      }
+    ];
+
+    if(!localStorage.getItem('portfolio_certificates')){
+      localStorage.setItem('portfolio_certificates', JSON.stringify(defaultCertificates));
+    }
+
+    function renderCertificates(){
+      const certificates = JSON.parse(localStorage.getItem('portfolio_certificates')) || [];
+      const count = document.getElementById('cert-count');
+
+      if (count) {
+        count.textContent = certificates.length + '+';
+      }
+
+      // Render Featured Certificate exactly matching featured project card design
+      const featuredContainer = document.getElementById('featured-certificate-container');
+      if (featuredContainer) {
+        if (certificates.length > 0) {
+          const featuredCert = certificates[0];
+          featuredContainer.innerHTML = `
+            <div class="glass-card project-card reveal-item revealed" style="margin-top: 1rem; transition: transform var(--transition), box-shadow var(--transition);">
+              <div class="project-img-wrapper" style="height: 130px; overflow: hidden; background: rgba(0,0,0,0.25);">
+                <img src="${featuredCert.image}" alt="${featuredCert.title}" style="width: 100%; height: 100%; object-fit: contain;">
+                <div class="project-overlay" id="featured-cert-zoom-trigger" data-image="${featuredCert.image}" data-title="${featuredCert.title}" style="cursor: pointer;">
+                  <button class="project-zoom-btn" aria-label="Open Fullscreen Preview" style="width: 40px; height: 40px; font-size: 1rem;">
+                    <i class="fa-solid fa-expand"></i>
+                  </button>
+                  <span class="project-overlay-text" style="font-size: 0.75rem;">CLICK TO ZOOM</span>
+                </div>
+              </div>
+              <div class="project-info" style="padding: 1rem; gap: 0.4rem;">
+                <span class="project-date" style="display: flex; align-items: center; gap: 0.4rem; color: var(--primary); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">
+                  <i class="fa-solid fa-star"></i> Featured Certificate
+                </span>
+                <h3 style="margin-top: 0.25rem; margin-bottom: 0.25rem; font-size: 1.05rem; font-weight: 600; color: white;">${featuredCert.title}</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.3; margin: 0;">Issued by ${featuredCert.issuer}</p>
+              </div>
+            </div>
+            <div style="margin-top: 1rem;">
+              <a href="certificates.html" class="btn btn-primary" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.5rem; text-decoration: none; box-sizing: border-box;">
+                <i class="fa-solid fa-certificate"></i> Show More Certificates
+              </a>
+            </div>
+          `;
+        } else {
+          featuredContainer.innerHTML = `
+            <div class="glass-card project-card reveal-item revealed" style="padding: 2rem; text-align: center; margin-top: 1rem;">
+              <i class="fa-solid fa-certificate" style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+              <h4 style="color: white; margin-bottom: 0.5rem;">No Certificates Uploaded</h4>
+              <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.4;">Upload certifications from the Manager panel to display them here.</p>
+            </div>
+          `;
+        }
+      }
+    }
+
+    // Initial render
+    renderCertificates();
+
+    // Event Delegation on document.body for certificates actions
+    document.body.addEventListener('click', (e) => {
+      // 1. Click on certificates-card redirects to certificates.html with transition
+      if (e.target.closest('#certificates-card')) {
+        e.preventDefault();
+        document.body.classList.add('page-exit');
+        const overlay = document.querySelector('.page-transition-overlay');
+        if (overlay) overlay.classList.add('active');
+        setTimeout(() => { window.location.href = 'certificates.html'; }, 400);
+        return;
+      }
+
+      // 2. Click to zoom featured certificate in native lightbox
+      const featuredZoom = e.target.closest('#featured-cert-zoom-trigger');
+      if (featuredZoom) {
+        e.stopPropagation();
+        zoomCertificateInLightbox(featuredZoom.getAttribute('data-image'), featuredZoom.getAttribute('data-title'));
+        return;
+      }
+    });
+
+    function zoomCertificateInLightbox(imageSrc, imageTitle) {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const lightboxCaption = document.getElementById('lightbox-caption');
+      const lightboxCounter = document.getElementById('lightbox-counter');
+      const lightboxPrev = document.getElementById('lightbox-prev');
+      const lightboxNext = document.getElementById('lightbox-next');
+
+      if (lightbox && lightboxImg) {
+        lightboxImg.src = imageSrc;
+        lightboxImg.alt = imageTitle;
+        if (lightboxCaption) lightboxCaption.textContent = imageTitle;
+        if (lightboxCounter) lightboxCounter.textContent = "Certificate Viewer";
+        if (lightboxPrev) lightboxPrev.classList.add('hidden');
+        if (lightboxNext) lightboxNext.classList.add('hidden');
+
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+  </script>
+
 
   <!-- Link Javascript -->
   <script src="script.js"></script>

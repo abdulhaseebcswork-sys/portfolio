@@ -514,12 +514,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Stats
     const statsContainer = document.getElementById('about-stats-container');
     if (statsContainer) {
-      statsContainer.innerHTML = data.about.stats.map(stat => `
-        <div class="glass-card stat-item reveal-item">
-          <span class="stat-num">${stat.num}</span>
-          <p class="stat-label">${stat.label}</p>
-        </div>
-      `).join('');
+      statsContainer.innerHTML = data.about.stats.map(stat => {
+        const isCert = stat.label.toLowerCase().includes('certification') || stat.label.toLowerCase().includes('certificate');
+        if (isCert) {
+          const certs = JSON.parse(localStorage.getItem('portfolio_certificates')) || [];
+          const count = certs.length;
+          return `
+            <div class="glass-card stat-item reveal-item" id="certificates-card" style="cursor:pointer;">
+              <span class="stat-num" id="cert-count">${count}+</span>
+              <p class="stat-label">${stat.label}</p>
+              <small style="color: var(--primary); display:block; margin-top:8px;">Click to View</small>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="glass-card stat-item reveal-item">
+              <span class="stat-num">${stat.num}</span>
+              <p class="stat-label">${stat.label}</p>
+            </div>
+          `;
+        }
+      }).join('');
     }
 
     // 4. Education Timeline
@@ -690,6 +705,158 @@ document.addEventListener('DOMContentLoaded', () => {
     revealItems.forEach(item => observer.observe(item));
   }
 
+  // ---------- Contact Google Form Submission Handler ----------
+
+  const contactForm = document.getElementById('portfolio-form');
+  const contactSubmitBtn = document.getElementById('contact-submit-btn');
+  const hiddenIframe = document.getElementById('hidden_iframe');
+  const contactToast = document.getElementById('contact-toast');
+
+  if (contactForm && hiddenIframe) {
+    let formSubmitted = false;
+
+    contactForm.addEventListener('submit', () => {
+      // Extract form input values
+      const nameVal = document.getElementById('name') ? document.getElementById('name').value.trim() : '';
+      const emailVal = document.getElementById('form-email') ? document.getElementById('form-email').value.trim() : '';
+      const phoneVal = document.getElementById('form-phone') ? document.getElementById('form-phone').value.trim() : '';
+      const addressVal = document.getElementById('form-address') ? document.getElementById('form-address').value.trim() : '';
+      const messageVal = document.getElementById('message') ? document.getElementById('message').value.trim() : '';
+
+      // Save backup locally in localStorage
+      try {
+        const backupMessages = JSON.parse(localStorage.getItem('portfolio_messages') || '[]');
+        backupMessages.unshift({
+          name: nameVal,
+          email: emailVal,
+          phone: phoneVal,
+          address: addressVal,
+          message: messageVal,
+          date: new Date().toLocaleString()
+        });
+        localStorage.setItem('portfolio_messages', JSON.stringify(backupMessages));
+      } catch (err) {
+        console.error('Failed to backup message locally:', err);
+      }
+
+      // Defer button state change to ensure browser records the click and submits the form details through the iframe
+      setTimeout(() => {
+        if (contactSubmitBtn) {
+          contactSubmitBtn.disabled = true;
+          contactSubmitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Sending...';
+        }
+      }, 10);
+      
+      // Set submission flag to true
+      formSubmitted = true;
+    });
+
+    hiddenIframe.addEventListener('load', () => {
+      // If load fires after our submit event
+      if (formSubmitted) {
+        // 1. Reset submission flag
+        formSubmitted = false;
+
+        // 2. Show the custom success toast notification
+        if (contactToast) {
+          contactToast.style.display = 'block';
+          contactToast.style.opacity = '1';
+          
+          // Clear any existing timeouts to prevent erratic hiding
+          if (window.toastTimeout) clearTimeout(window.toastTimeout);
+          
+          // Smooth fade-out after 5 seconds
+          window.toastTimeout = setTimeout(() => {
+            contactToast.style.transition = 'opacity 0.5s ease';
+            contactToast.style.opacity = '0';
+            setTimeout(() => {
+              contactToast.style.display = 'none';
+              contactToast.style.transition = '';
+            }, 500);
+          }, 5000);
+        }
+
+        // 3. Reset form inputs
+        contactForm.reset();
+
+        // 4. Restore submit button state
+        if (contactSubmitBtn) {
+          contactSubmitBtn.disabled = false;
+          contactSubmitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+        }
+      }
+    });
+  }
+
   // Initial observation of all reveal-items already in the DOM
   observeRevealItems();
+
+  // ==========================================================================
+  // 9. PAGE TRANSITION ANIMATIONS
+  // ==========================================================================
+
+  // Create the neon sweep overlay element
+  const transitionOverlay = document.createElement('div');
+  transitionOverlay.classList.add('page-transition-overlay');
+  document.body.appendChild(transitionOverlay);
+
+  /**
+   * Intercept internal navigation links to play a smooth exit animation
+   * before navigating to the target page.
+   */
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a');
+    if (!link) return;
+
+    const href = link.getAttribute('href');
+    if (!href) return;
+
+    // Skip: anchor links, javascript:, external links, new-tab targets, mailto/tel
+    if (href.startsWith('#') || 
+        href.startsWith('javascript:') ||
+        href.startsWith('mailto:') ||
+        href.startsWith('tel:') ||
+        link.target === '_blank' ||
+        link.hasAttribute('download')) {
+      return;
+    }
+
+    // Only intercept same-origin .html links or relative paths
+    try {
+      const url = new URL(href, window.location.origin);
+      if (url.origin !== window.location.origin) return;
+    } catch {
+      return;
+    }
+
+    // Don't intercept if the link is the current page
+    if (href === window.location.pathname || 
+        href === window.location.href) {
+      return;
+    }
+
+    e.preventDefault();
+
+    // Trigger exit animation
+    document.body.classList.add('page-exit');
+    transitionOverlay.classList.add('active');
+
+    // Navigate after animation completes
+    setTimeout(() => {
+      window.location.href = href;
+    }, 400);
+  });
+
+  // Handle browser back/forward button — restore page appearance
+  window.addEventListener('pageshow', (e) => {
+    if (e.persisted) {
+      // Page was restored from bfcache (back/forward navigation)
+      document.body.classList.remove('page-exit');
+      transitionOverlay.classList.remove('active');
+      document.body.style.animation = 'none';
+      // Force reflow then re-apply entry animation
+      void document.body.offsetHeight;
+      document.body.style.animation = '';
+    }
+  });
 });

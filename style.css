@@ -1807,3 +1807,33 @@ textarea.form-control {
     opacity: 1;
   }
 }
+
+/* ===========================================================================
+   PAGE TRANSITION OVERLAY AND EXIT ANIMATION
+   =========================================================================== */
+
+/* Fullscreen overlay that fades in during navigation */
+.page-transition-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--gradient-main);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  z-index: 9999;
+}
+
+.page-transition-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Fade-out animation for the current page before navigation */
+.page-exit {
+  animation: pageFadeOut 0.4s forwards;
+}
+
+@keyframes pageFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}

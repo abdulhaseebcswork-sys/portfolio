@@ -705,8 +705,15 @@
         <button class="tab-btn" data-tab="panel-interests" id="tab-btn-interests">
           <i class="fa-solid fa-heart"></i> Hobbies & Languages
         </button>
+        <button class="tab-btn" data-tab="panel-certificates" id="tab-btn-certificates">
+          <i class="fa-solid fa-certificate"></i> Certificates
+        </button>
+
         <button class="tab-btn" data-tab="panel-security" id="tab-btn-security">
           <i class="fa-solid fa-shield-halved"></i> Security & Auth
+        </button>
+        <button class="tab-btn" data-tab="panel-messages" id="tab-btn-messages">
+          <i class="fa-solid fa-envelope"></i> Contact Messages <span id="messages-counter-badge" style="background: var(--primary); color: var(--bg-main); font-size: 0.75rem; font-weight: 700; padding: 2px 6px; border-radius: 10px; margin-left: auto; display: none;">0</span>
         </button>
       </aside>
       
@@ -976,6 +983,66 @@
           </form>
         </div>
 
+        
+        <!-- ==========================================
+             PANEL: CERTIFICATES
+             ========================================== -->
+        <div class="tab-panel" id="panel-certificates">
+          <div class="panel-header">
+            <h2>Certificates Manager</h2>
+          </div>
+
+          <div style="margin-bottom:25px; padding:20px; background:rgba(56,189,248,0.05); border-radius:15px; border:1px solid rgba(56,189,248,0.15);">
+            <h3 id="certificate-form-title" style="margin-bottom:15px; color:var(--primary);">Add New Certificate</h3>
+            
+            <input type="hidden" id="certificate-index" value="-1">
+
+            <div class="form-group">
+              <label>Certificate Title</label>
+              <input type="text" id="certificate-title" class="form-control" placeholder="e.g. Flutter Development">
+            </div>
+
+            <div class="form-group">
+              <label>Institute / Issuer</label>
+              <input type="text" id="certificate-issuer" class="form-control" placeholder="e.g. Cipher Schools">
+            </div>
+
+            <div class="form-group">
+              <label>Upload Certificate Image</label>
+              <input type="file" id="certificate-image" class="form-control" accept="image/*">
+            </div>
+
+            <!-- Image Preview Block -->
+            <div id="certificate-preview-wrapper" style="display: none; margin-bottom: 15px;">
+              <label style="display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 0.9rem;">Image Preview</label>
+              <div style="position: relative; width: 100%; max-height: 180px; border-radius: 10px; overflow: hidden; border: 1px solid rgba(56,189,248,0.25); background: rgba(0,0,0,0.25); display: flex; justify-content: center; align-items: center;">
+                <img id="certificate-preview-img" src="" style="width: 100%; height: 180px; object-fit: contain;">
+                <button type="button" id="btn-remove-preview-img" style="position: absolute; top: 10px; right: 10px; background: rgba(244,63,94,0.85); color: white; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: var(--transition);" title="Remove Image">
+                  <i class="fa-solid fa-xmark" style="font-size: 0.85rem;"></i>
+                </button>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button type="button" id="add-certificate-btn" class="btn btn-primary" style="border:none; cursor:pointer; width: auto;">
+                <i class="fa-solid fa-plus"></i> Add Certificate
+              </button>
+
+              <button type="button" id="save-certificate-btn" class="btn btn-primary" style="border:none; cursor:pointer; display: none; width: auto;">
+                <i class="fa-solid fa-floppy-disk"></i> Save Certificate
+              </button>
+
+              <button type="button" id="cancel-certificate-edit-btn" class="btn btn-secondary" style="cursor:pointer; display: none; width: auto; background: rgba(255,255,255,0.02); border-color: var(--border-color);">
+                Cancel
+              </button>
+            </div>
+          </div>
+
+          <div id="certificates-manager-list" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px;">
+          </div>
+        </div>
+
+
         <!-- ==========================================
              PANEL 7: SECURITY & AUTH
              ========================================== -->
@@ -1024,6 +1091,28 @@
               <i class="fa-solid fa-shield-halved"></i> Update Password
             </button>
           </form>
+        </div>
+
+        <!-- ==========================================
+             PANEL 8: CONTACT MESSAGES (LOCAL BACKUP)
+             ========================================== -->
+        <div class="tab-panel" id="panel-messages">
+          <div class="panel-header">
+            <h2>Client Contact Messages</h2>
+            <div class="panel-actions">
+              <button type="button" id="btn-clear-all-messages" class="btn btn-danger" style="padding: 0.6rem 1.5rem; font-size: 0.9rem; cursor:pointer;">
+                <i class="fa-solid fa-trash-can"></i> Clear All Messages
+              </button>
+            </div>
+          </div>
+          
+          <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.95rem;">
+            <i class="fa-solid fa-shield-halved" style="color: var(--primary); margin-right: 0.25rem;"></i> <strong>Local Storage Backup:</strong> These are contact form submissions saved directly to your browser's local storage. This guarantees you never lose a business inquiry even if Google Forms faces network blocks or permission errors.
+          </p>
+          
+          <div id="messages-list-container" class="list-editor-container" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <!-- Dynamic message cards rendered via JS -->
+          </div>
         </div>
 
       </main>
@@ -1193,5 +1282,273 @@
 
   <!-- Link Javascript -->
   <script src="manager.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  // Toast notifications for Certificates CRUD operations
+  function showCertToast(message, isError = false) {
+    const toast = document.getElementById('save-toast');
+    const toastMsg = document.getElementById('save-toast-message');
+    if (!toast || !toastMsg) return;
+    
+    toastMsg.textContent = message;
+    
+    if (isError) {
+      toast.style.borderColor = '#f43f5e';
+      const icon = toast.querySelector('i');
+      if (icon) {
+        icon.className = 'fa-solid fa-circle-xmark';
+        icon.style.color = '#f43f5e';
+      }
+    } else {
+      toast.style.borderColor = 'var(--primary)';
+      const icon = toast.querySelector('i');
+      if (icon) {
+        icon.className = 'fa-solid fa-circle-check';
+        icon.style.color = 'var(--primary)';
+      }
+    }
+
+    toast.classList.add('active');
+
+    // Auto dismiss after 3 seconds
+    setTimeout(() => {
+      toast.classList.remove('active');
+    }, 3000);
+  }
+
+  function getCertificates(){
+    return JSON.parse(localStorage.getItem('portfolio_certificates')) || [];
+  }
+
+  function saveCertificates(data){
+    localStorage.setItem('portfolio_certificates', JSON.stringify(data));
+  }
+
+  function renderCertificatesManager(){
+    const container = document.getElementById('certificates-manager-list');
+    if(!container) return;
+
+    const certificates = getCertificates();
+
+    if (certificates.length === 0) {
+      container.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: rgba(255,255,255,0.02); border: 1px dashed var(--border-color); border-radius: 18px; color: var(--text-muted);">
+          <i class="fa-solid fa-graduation-cap" style="font-size: 2.5rem; margin-bottom: 15px; color: var(--primary); opacity: 0.7;"></i>
+          <p style="font-size: 1.1rem; font-weight: 500; margin-bottom: 5px;">No certificates uploaded yet</p>
+          <p style="font-size: 0.9rem;">Add your earned certificates above to display them on your portfolio.</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = certificates.map((cert, index) => `
+      <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-color); border-radius:18px; overflow:hidden; transition: transform var(--transition), box-shadow var(--transition); display: flex; flex-direction: column;">
+        <div style="position: relative; height: 160px; overflow: hidden; background: rgba(0,0,0,0.2);">
+          <img src="${cert.image}" style="width:100%; height:100%; object-fit:contain;">
+          <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);"></div>
+        </div>
+        <div style="padding:15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
+          <div style="margin-bottom: 15px;">
+            <h3 style="margin-bottom:6px; font-size: 1.1rem; font-weight: 600; color: var(--text-main); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${cert.title}</h3>
+            <p style="color:var(--text-muted); font-size: 0.85rem; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">
+              <i class="fa-solid fa-award" style="color: var(--primary); margin-right: 5px;"></i> ${cert.issuer}
+            </p>
+          </div>
+
+          <div style="display: flex; gap: 8px;">
+            <button onclick="editCertificate(${index})" class="btn btn-secondary" style="flex: 1; cursor:pointer; padding: 8px; font-size: 0.85rem; display: flex; justify-content: center; align-items: center; gap: 5px; background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.2); color: var(--primary);">
+              <i class="fa-solid fa-pen-to-square"></i> Edit
+            </button>
+            <button onclick="deleteCertificate(${index})" class="btn btn-danger" style="flex: 1; cursor:pointer; padding: 8px; font-size: 0.85rem; display: flex; justify-content: center; align-items: center; gap: 5px;">
+              <i class="fa-solid fa-trash"></i> Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Edit certificate - populates form and enters edit state
+  window.editCertificate = function(index){
+    const certificates = getCertificates();
+    const cert = certificates[index];
+    if(!cert) return;
+
+    document.getElementById('certificate-title').value = cert.title;
+    document.getElementById('certificate-issuer').value = cert.issuer;
+    document.getElementById('certificate-preview-img').src = cert.image;
+    document.getElementById('certificate-preview-wrapper').style.display = 'block';
+    
+    document.getElementById('certificate-index').value = index;
+    document.getElementById('certificate-form-title').innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Edit Certificate: <span style="color: var(--text-main); font-weight: 600;">${cert.title}</span>`;
+    
+    document.getElementById('add-certificate-btn').style.display = 'none';
+    document.getElementById('save-certificate-btn').style.display = 'block';
+    document.getElementById('cancel-certificate-edit-btn').style.display = 'block';
+
+    // Reset file input selection so it doesn't conflict
+    document.getElementById('certificate-image').value = '';
+
+    // Scroll form smoothly to top of workspace panel
+    document.getElementById('certificate-form-title').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
+
+  // Cancels edit state and resets the form
+  function cancelCertificateEdit(){
+    document.getElementById('certificate-title').value = '';
+    document.getElementById('certificate-issuer').value = '';
+    document.getElementById('certificate-image').value = '';
+    document.getElementById('certificate-preview-img').src = '';
+    document.getElementById('certificate-preview-wrapper').style.display = 'none';
+    
+    document.getElementById('certificate-index').value = '-1';
+    document.getElementById('certificate-form-title').innerHTML = 'Add New Certificate';
+    
+    document.getElementById('add-certificate-btn').style.display = 'block';
+    document.getElementById('save-certificate-btn').style.display = 'none';
+    document.getElementById('cancel-certificate-edit-btn').style.display = 'none';
+  }
+  window.cancelCertificateEdit = cancelCertificateEdit;
+
+  // Bind cancel button click
+  const cancelBtn = document.getElementById('cancel-certificate-edit-btn');
+  if(cancelBtn){
+    cancelBtn.addEventListener('click', cancelCertificateEdit);
+  }
+
+  // Delete certificate helper
+  window.deleteCertificate = function(index){
+    const certificates = getCertificates();
+    const cert = certificates[index];
+    if(!cert) return;
+
+    if(confirm(`Are you sure you want to delete the certificate "${cert.title}"?`)){
+      certificates.splice(index,1);
+      saveCertificates(certificates);
+      
+      // If currently editing this item, cancel the edit state
+      const currentEditIndex = parseInt(document.getElementById('certificate-index').value);
+      if(currentEditIndex === index){
+        cancelCertificateEdit();
+      } else if (currentEditIndex > index) {
+        // Shift edit index back to match modified array index
+        document.getElementById('certificate-index').value = currentEditIndex - 1;
+      }
+
+      renderCertificatesManager();
+      showCertToast('Certificate deleted.');
+    }
+  };
+
+  // File Input Preview change listener
+  const fileInput = document.getElementById('certificate-image');
+  if(fileInput){
+    fileInput.addEventListener('change', function(){
+      if(fileInput.files && fileInput.files[0]){
+        const reader = new FileReader();
+        reader.onload = function(e){
+          document.getElementById('certificate-preview-img').src = e.target.result;
+          document.getElementById('certificate-preview-wrapper').style.display = 'block';
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      }
+    });
+  }
+
+  // Remove preview image listener
+  const removePreviewBtn = document.getElementById('btn-remove-preview-img');
+  if(removePreviewBtn){
+    removePreviewBtn.addEventListener('click', function(){
+      document.getElementById('certificate-image').value = '';
+      document.getElementById('certificate-preview-img').src = '';
+      document.getElementById('certificate-preview-wrapper').style.display = 'none';
+    });
+  }
+
+  // Add Certificate Event
+  const addBtn = document.getElementById('add-certificate-btn');
+  if(addBtn){
+    addBtn.addEventListener('click', function(){
+      const title = document.getElementById('certificate-title').value.trim();
+      const issuer = document.getElementById('certificate-issuer').value.trim();
+      const previewImg = document.getElementById('certificate-preview-img').src;
+
+      if(!title){
+        showCertToast('Please enter a certificate title.', true);
+        document.getElementById('certificate-title').focus();
+        return;
+      }
+      if(!issuer){
+        showCertToast('Please enter the issuer / institute.', true);
+        document.getElementById('certificate-issuer').focus();
+        return;
+      }
+      if(!previewImg || previewImg === window.location.href){
+        showCertToast('Please upload a certificate image.', true);
+        return;
+      }
+
+      const certificates = getCertificates();
+      certificates.push({
+        title: title,
+        issuer: issuer,
+        image: previewImg
+      });
+
+      saveCertificates(certificates);
+      renderCertificatesManager();
+      cancelCertificateEdit();
+      showCertToast('Certificate added successfully!');
+    });
+  }
+
+  // Save/Update Certificate Event
+  const saveBtn = document.getElementById('save-certificate-btn');
+  if(saveBtn){
+    saveBtn.addEventListener('click', function(){
+      const index = parseInt(document.getElementById('certificate-index').value);
+      if(index < 0) return;
+
+      const title = document.getElementById('certificate-title').value.trim();
+      const issuer = document.getElementById('certificate-issuer').value.trim();
+      const previewImg = document.getElementById('certificate-preview-img').src;
+
+      if(!title){
+        showCertToast('Please enter a certificate title.', true);
+        document.getElementById('certificate-title').focus();
+        return;
+      }
+      if(!issuer){
+        showCertToast('Please enter the issuer / institute.', true);
+        document.getElementById('certificate-issuer').focus();
+        return;
+      }
+      if(!previewImg || previewImg === window.location.href){
+        showCertToast('Please upload a certificate image.', true);
+        return;
+      }
+
+      const certificates = getCertificates();
+      if(index >= certificates.length) return;
+
+      certificates[index] = {
+        title: title,
+        issuer: issuer,
+        image: previewImg
+      };
+
+      saveCertificates(certificates);
+      renderCertificatesManager();
+      cancelCertificateEdit();
+      showCertToast('Certificate updated successfully!');
+    });
+  }
+
+  // Initial load
+  renderCertificatesManager();
+});
+</script>
+
 </body>
 </html>

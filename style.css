@@ -1,7 +1,7 @@
 /* ==========================================================================
    DESIGN SYSTEM & VARIABLES
    ========================================================================== */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Sacramento&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 
 :root {
   --bg-main: #020617;        /* Very dark blue/black */
@@ -20,6 +20,8 @@
   
   --font-heading: 'Outfit', sans-serif;
   --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-condensed: 'Bebas Neue', sans-serif;
+  --font-script: 'Sacramento', cursive;
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --shadow-neon: 0 0 20px rgba(56, 189, 248, 0.15);
   --shadow-neon-hover: 0 0 30px rgba(56, 189, 248, 0.35);
@@ -1836,4 +1838,373 @@ textarea.form-control {
 @keyframes pageFadeOut {
   from { opacity: 1; }
   to { opacity: 0; }
+}
+
+/* ==========================================================================
+   PREMIUM NEON CYBER-BLUE INTRO SPLASH SCREEN (Inspired by Rebranding)
+   ========================================================================== */
+#intro-screen {
+  position: fixed;
+  inset: 0;
+  background-color: #020617;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.8s cubic-bezier(0.85, 0, 0.15, 1),
+              visibility 0.8s cubic-bezier(0.85, 0, 0.15, 1),
+              transform 0.8s cubic-bezier(0.85, 0, 0.15, 1);
+  overflow: hidden;
+}
+
+/* Ambient Radial Neon Glow in the center */
+.intro-ambient-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(59, 130, 246, 0.05) 50%, transparent 70%);
+  filter: blur(80px);
+  z-index: 1;
+  pointer-events: none;
+  animation: introAmbientPulse 8s ease-in-out infinite alternate;
+}
+
+@keyframes introAmbientPulse {
+  0% { transform: scale(0.9) translate(-20px, -20px); opacity: 0.8; }
+  100% { transform: scale(1.1) translate(20px, 20px); opacity: 1.2; }
+}
+
+/* Giant background vertical outline text "HASEEB" or "DEVELOPER" */
+.intro-bg-text-wrapper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.intro-bg-text {
+  font-family: var(--font-condensed);
+  font-size: 35vh; /* Massive vertical sizing */
+  font-weight: 900;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(56, 189, 248, 0.035);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-transform: uppercase;
+  transform: rotate(-90deg); /* Vertical background alignment */
+  white-space: nowrap;
+  opacity: 0;
+  animation: introBgReveal 2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s;
+  user-select: none;
+  filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.01));
+}
+
+@keyframes introBgReveal {
+  0% { opacity: 0; transform: rotate(-90deg) scale(0.85); }
+  100% { opacity: 1; transform: rotate(-90deg) scale(1); }
+}
+
+.intro-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  width: 95%;
+  max-width: 1400px;
+  padding: 2rem;
+  position: relative;
+}
+
+/* Top Meta Header info */
+.intro-top-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 3.5rem;
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: introFadeSlideDown 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards 0.4s;
+}
+
+.intro-meta-line {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 6px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.intro-meta-line.accent {
+  color: var(--primary);
+  font-size: 0.7rem;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+
+/* Middle Branding Group */
+.intro-branding-group {
+  margin-bottom: 3rem;
+  position: relative;
+  width: 100%;
+}
+
+.intro-sub-heading {
+  font-family: var(--font-heading);
+  font-size: clamp(1rem, 2.2vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: clamp(6px, 1.2vw, 16px);
+  color: #a5f3fc; /* Light Ice Blue */
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: introFadeSlideUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards 0.5s;
+  text-shadow: 0 0 10px rgba(165, 243, 252, 0.3);
+}
+
+.intro-main-title-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.intro-main-title {
+  font-family: var(--font-condensed);
+  font-size: clamp(3.8rem, 14vw, 12rem);
+  font-weight: 900;
+  color: var(--text-main);
+  line-height: 0.85;
+  letter-spacing: clamp(2px, 0.5vw, 8px);
+  text-transform: uppercase;
+  margin: 0;
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  animation: introRevealMainTitle 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.6s;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+}
+
+@keyframes introRevealMainTitle {
+  0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Elegant diagonal signature script overlay "Flutter" */
+.intro-script-overlay {
+  font-family: var(--font-script);
+  font-size: clamp(3.2rem, 9.5vw, 8rem);
+  color: #38bdf8;
+  text-shadow: 0 0 15px rgba(56, 189, 248, 0.8), 0 0 30px rgba(56, 189, 248, 0.4);
+  position: absolute;
+  bottom: -25px;
+  right: -30px;
+  transform: rotate(-12deg) scale(0.85);
+  transform-origin: bottom right;
+  opacity: 0;
+  animation: introRevealScript 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 1.2s;
+  z-index: 4;
+}
+
+@keyframes introRevealScript {
+  0% { opacity: 0; transform: rotate(-12deg) scale(0.6) translateY(20px); }
+  100% { opacity: 1; transform: rotate(-12deg) scale(1) translateY(0); }
+}
+
+/* Bio description below the branding */
+.intro-description {
+  font-family: var(--font-body);
+  font-size: clamp(0.75rem, 1.1vw, 0.95rem);
+  font-weight: 500;
+  letter-spacing: clamp(2px, 0.3vw, 4px);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  max-width: 750px;
+  line-height: 1.8;
+  margin: 0 auto 3.5rem auto;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: introFadeSlideUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards 0.9s;
+}
+
+/* Links inside the intro screen */
+.intro-footer-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: introFadeIn 0.8s ease forwards 1.4s;
+}
+
+.intro-link {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  transition: var(--transition);
+}
+
+.intro-link:hover {
+  color: var(--primary);
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+}
+
+.intro-link-separator {
+  width: 4px;
+  height: 4px;
+  background: var(--primary);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--primary);
+}
+
+/* Loader bar styling */
+.intro-loader {
+  width: 200px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  opacity: 0;
+  animation: introFadeIn 0.8s ease forwards 1.5s;
+  border: 1px solid rgba(255, 255, 255, 0.01);
+}
+
+.intro-progress {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 100%);
+  box-shadow: 0 0 10px var(--primary);
+  border-radius: 4px;
+  animation: introProgressLoad 2s cubic-bezier(0.4, 0, 0.2, 1) forwards 1.5s;
+}
+
+/* Action button left - "Visit site" pill */
+.intro-action-btn {
+  position: absolute;
+  bottom: 40px;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  color: var(--text-main);
+  cursor: pointer;
+  z-index: 5;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  opacity: 0;
+}
+
+.intro-btn-left {
+  left: 40px;
+  padding: 0.75rem 1.75rem;
+  border-radius: 50px;
+  gap: 0.75rem;
+  animation: introFadeSlideRight 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards 1.6s;
+}
+
+.intro-btn-left span {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.intro-btn-left i {
+  font-size: 0.8rem;
+  transition: transform 0.3s ease;
+}
+
+.intro-btn-left:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-neon), 0 4px 30px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.intro-btn-left:hover i {
+  transform: translateX(4px);
+}
+
+/* Action button right - info globe circular */
+.intro-btn-right {
+  right: 40px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 1rem;
+  animation: introFadeSlideLeft 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards 1.6s;
+}
+
+.intro-btn-right:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-neon), 0 4px 30px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px) rotate(15deg);
+  background: rgba(56, 189, 248, 0.08);
+  color: var(--primary);
+}
+
+/* Navigation page exit animation triggers */
+#intro-screen.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.15); /* Sleek dramatic zooming into the site */
+  filter: blur(15px);
+}
+
+/* Animation utilities for the keyframes */
+@keyframes introFadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes introFadeSlideUp {
+  0% { opacity: 0; transform: translateY(15px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes introFadeSlideDown {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes introFadeSlideRight {
+  0% { opacity: 0; transform: translateX(-30px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes introFadeSlideLeft {
+  0% { opacity: 0; transform: translateX(30px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes introProgressLoad {
+  0% { width: 0; }
+  20% { width: 15%; }
+  45% { width: 50%; }
+  75% { width: 85%; }
+  100% { width: 100%; }
+}
+
+/* Hide on ultra-small screens that cannot fit design elegantly */
+@media (max-height: 500px) {
+  .intro-bg-text-wrapper, .intro-top-meta, .intro-description, .intro-footer-links, .intro-action-btn {
+    display: none !important;
+  }
+  .intro-branding-group {
+    margin-bottom: 1.5rem;
+  }
 }

@@ -101,6 +101,30 @@
   <script src="script.js"></script>
 
   <script>
+    const defaultCertificates = [
+      {
+        title: "App Development with Flutter",
+        issuer: "Arch Technologies",
+        image: "ct3.png"
+      },
+      {
+        title: "Introduction to AI",
+        issuer: "The Open University",
+        image: "ct1.png"
+      },
+      {
+        title: "Android Development",
+        issuer: "Professional Training",
+        image: "ct2.png"
+      }
+    ];
+
+    // Initialize or migrate certificates if placeholders exist or need update
+    const existingCerts = localStorage.getItem('portfolio_certificates');
+    if (!existingCerts || existingCerts.includes('placehold.co') || !existingCerts.includes('ct3.png') || existingCerts.includes('Cipher Schools')) {
+      localStorage.setItem('portfolio_certificates', JSON.stringify(defaultCertificates));
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       function renderCertificatesPage() {
         const certificates = JSON.parse(localStorage.getItem('portfolio_certificates')) || [];

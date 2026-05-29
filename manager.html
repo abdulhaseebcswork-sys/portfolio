@@ -1317,7 +1317,30 @@ document.addEventListener('DOMContentLoaded', function(){
     }, 3000);
   }
 
+  const defaultCertificates = [
+    {
+      title: "App Development with Flutter",
+      issuer: "Arch Technologies",
+      image: "ct3.png"
+    },
+    {
+      title: "Introduction to AI",
+      issuer: "The Open University",
+      image: "ct1.png"
+    },
+    {
+      title: "Android Development",
+      issuer: "Professional Training",
+      image: "ct2.png"
+    }
+  ];
+
   function getCertificates(){
+    // Initialize or migrate certificates if placeholders exist or need update
+    const existingCerts = localStorage.getItem('portfolio_certificates');
+    if (!existingCerts || existingCerts.includes('placehold.co') || !existingCerts.includes('ct3.png') || existingCerts.includes('Cipher Schools')) {
+      localStorage.setItem('portfolio_certificates', JSON.stringify(defaultCertificates));
+    }
     return JSON.parse(localStorage.getItem('portfolio_certificates')) || [];
   }
 

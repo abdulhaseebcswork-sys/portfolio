@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Projects | Abdul Haseeb Portfolio</title>
+  <title>Abdul Haseeb | Mobile Application & Flutter Developer Portfolio</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="All projects developed by Abdul Haseeb, Mobile Application and Flutter Developer.">
-  <meta name="keywords" content="Abdul Haseeb, Flutter, Android Developer, Mobile Apps, Projects Portfolio">
+  <meta name="description" content="Portfolio of Abdul Haseeb, a professional Mobile Application and Flutter Developer with experience in Android development, UI/UX design, and API integration.">
+  <meta name="keywords" content="Abdul Haseeb, Flutter, Android Developer, Mobile Apps, Portfolio, CV, Wahcantt, Pakistan, Web Developer">
   <meta name="author" content="Abdul Haseeb">
   
   <!-- Icons -->
@@ -16,48 +16,634 @@
   <!-- Link Stylesheet -->
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="projects-page">
+<body>
+
+  <!-- Premium Intro Splash Screen Controller -->
+  <script>
+    (function() {
+      // Check if we should display the intro screen (only once per browser tab session)
+      let showIntro = true;
+      try {
+        if (sessionStorage.getItem('introPlayed') === 'true') {
+          showIntro = false;
+        }
+      } catch (e) {
+        console.warn("sessionStorage check failed, falling back to show intro:", e);
+      }
+
+      if (!showIntro) {
+        return; // Skip drawing HTML and modifying styles entirely
+      }
+
+      // Mark as played immediately so any subsequent navigation/back-clicks in this session will skip it
+      try {
+        sessionStorage.setItem('introPlayed', 'true');
+      } catch (e) {
+        console.warn("sessionStorage set failed:", e);
+      }
+
+      // Show intro splash screen on every page load/refresh unconditionally
+      document.write(`
+        <div id="intro-screen">
+          <!-- Ambient glowing effects -->
+          <div class="intro-ambient-glow"></div>
+          
+          <!-- Massive background vertical text -->
+          <div class="intro-bg-text-wrapper">
+            <div class="intro-bg-text">PORTFOLIO</div>
+          </div>
+          
+          <div class="intro-content">
+            <!-- Top meta headers -->
+            <div class="intro-top-meta">
+              <span class="intro-meta-line">WELCOME TO MY</span>
+              <span class="intro-meta-line accent">DIGITAL SPACE</span>
+            </div>
+            
+            <!-- Center branding heading -->
+            <div class="intro-branding-group">
+              <div class="intro-sub-heading">ABDUL HASEEB</div>
+              <div class="intro-main-title-wrapper">
+                <h1 class="intro-main-title">DEVELOPER</h1>
+                <div class="intro-script-overlay">Flutter</div>
+              </div>
+            </div>
+            
+            <!-- Description biography -->
+            <p class="intro-description">
+              PASSIONATE MOBILE APPLICATION & FLUTTER DEVELOPER SPECIALIZING IN NATIVE ANDROID & CROSS-PLATFORM SOLUTIONS.
+            </p>
+            
+            <!-- Footer contact info -->
+            <div class="intro-footer-links">
+              <span class="intro-link">HASEEB.DEV</span>
+              <span class="intro-link-separator"></span>
+              <span class="intro-link">abdulhaseeb.cs.work@gmail.com</span>
+            </div>
+            
+            <!-- Sleek loading indicator -->
+            <div class="intro-loader">
+              <div class="intro-progress"></div>
+            </div>
+          </div>
+          
+          <!-- Bottom Left Skipping/Entering Pill Button -->
+          <button class="intro-action-btn intro-btn-left" id="intro-skip-btn">
+            <span>Visit Site</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+          
+          <!-- Bottom Right Decorative Globe Button -->
+          <div class="intro-action-btn intro-btn-right">
+            <i class="fa-solid fa-globe"></i>
+          </div>
+        </div>
+      `);
+      
+      // Disable body scroll while intro is playing
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+      
+      // Safety timeout to hide intro after 3.8s in case load event fires early or late
+      const safetyTimeout = setTimeout(hideIntro, 3800);
+
+      window.addEventListener('load', () => {
+        // Keep splash screen visible for at least 3.5s for beautiful animation completion
+        setTimeout(hideIntro, 3500);
+      });
+
+      function hideIntro() {
+        clearTimeout(safetyTimeout);
+        const intro = document.getElementById('intro-screen');
+        if (intro && !intro.classList.contains('fade-out')) {
+          intro.classList.add('fade-out');
+          
+          // Enable body scrolling
+          document.documentElement.style.overflow = '';
+          document.body.style.overflow = '';
+          
+          // Remove the intro element from DOM after transition finishes
+          setTimeout(() => {
+            intro.remove();
+          }, 800);
+        }
+      }
+      
+      // Add action events
+      document.addEventListener('DOMContentLoaded', () => {
+        const intro = document.getElementById('intro-screen');
+        const skipBtn = document.getElementById('intro-skip-btn');
+        if (intro) {
+          // Clicking anywhere on the background (except buttons) can skip the intro too
+          intro.addEventListener('click', (e) => {
+            if (!e.target.closest('.intro-action-btn') && !e.target.closest('.intro-link')) {
+              hideIntro();
+            }
+          });
+        }
+        if (skipBtn) {
+          skipBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            hideIntro();
+          });
+        }
+      });
+    })();
+  </script>
 
   <!-- ==========================================================================
        HEADER & NAVIGATION
        ========================================================================== -->
   <header class="header" id="header">
     <div class="container nav-container">
-      <a href="index.html" class="logo">
+      <a href="#home" class="logo">
         <i class="fa-solid fa-code"></i> Haseeb<span>Portfolio</span>
       </a>
       
-      <div style="display: flex; gap: 1rem; align-items: center;">
-        <a href="#" id="nav-manager-link" class="btn btn-secondary" style="padding: 0.5rem 1.25rem; font-size: 0.9rem; border-radius: 30px; color: var(--primary);">
-          <i class="fa-solid fa-lock"></i> Manager
-        </a>
-        <a href="index.html" class="btn btn-secondary" style="padding: 0.5rem 1.25rem; font-size: 0.9rem; border-radius: 30px;">
-          <i class="fa-solid fa-arrow-left"></i> Back to Home
-        </a>
-      </div>
+      <nav class="nav-menu">
+        <ul class="nav-links">
+          <li class="nav-item active"><a href="#home">Home</a></li>
+          <li class="nav-item"><a href="#about">About</a></li>
+          <li class="nav-item"><a href="#skills">Skills</a></li>
+          <li class="nav-item"><a href="#projects">Projects</a></li>
+          <li class="nav-item"><a href="#experience">Experience</a></li>
+          <li class="nav-item"><a href="#contact">Contact</a></li>
+          <li class="nav-item"><a href="#" id="nav-manager-link" style="color: var(--primary);"><i class="fa-solid fa-lock" style="margin-right: 0.25rem;"></i> Manager</a></li>
+        </ul>
+      </nav>
+      
+      <button class="hamburger" id="hamburger" aria-label="Toggle Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
   </header>
 
   <!-- ==========================================================================
-       PROJECTS GRID SECTION
+       HERO SECTION
        ========================================================================== -->
-  <section class="projects-section" style="padding-top: 120px; min-height: 85vh;">
-    <div class="container">
-      <div class="projects-header-container" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; flex-wrap: wrap; gap: 1.5rem;">
-        <div>
-          <h1 style="font-size: 2.5rem; background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">All My Projects</h1>
-          <p style="color: var(--text-muted); margin-top: 0.5rem;">Explore all applications, designs, and tools I have built.</p>
+  <section class="hero" id="home">
+    <!-- Ambient Background Glows -->
+    <div class="hero-glow-1"></div>
+    <div class="hero-glow-2"></div>
+
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <div class="hero-tag" id="hero-tag-val">Available for Internships & Projects</div>
+        <h1>Hi, I'm <br><span class="hero-name" id="hero-name-val">Abdul Haseeb</span></h1>
+        <div class="hero-title">
+          I'm a <span id="typing-text"></span><span class="typing-cursor"></span>
+        </div>
+        <p class="hero-desc" id="hero-desc-val">
+          Passionate BS Computer Science student and Mobile Application Developer specializing in Flutter and native Android. I build elegant, performant mobile apps integrated with real-time backend databases and external APIs.
+        </p>
+        <div class="hero-buttons">
+          <a href="#projects" class="btn btn-primary">
+            <i class="fa-solid fa-briefcase"></i> View Projects
+          </a>
+          <a href="#contact" class="btn btn-secondary">
+            <i class="fa-solid fa-paper-plane"></i> Contact Me
+          </a>
         </div>
       </div>
       
-      <!-- Dynamic Projects Grid -->
-      <div id="projects-page-grid" class="projects-grid">
-        <!-- Rendered Dynamically via JS -->
+      <div class="hero-image-wrapper">
+        <div class="avatar-glow"></div>
+        <div class="avatar-frame">
+          <img id="hero-avatar-img" src="haseebimg.jpeg" alt="Abdul Haseeb Profile Photo">
+        </div>
+        
+        <!-- Floating Skills Icons around DP -->
+        <div class="floating-icon icon-flutter">
+          <i class="fa-solid fa-mobile-screen-button" style="color: #38bdf8;"></i> <span>Flutter</span>
+        </div>
+        <div class="floating-icon icon-android">
+          <i class="fa-brands fa-android" style="color: #a4c639;"></i> <span>Android</span>
+        </div>
+        <div class="floating-icon icon-firebase">
+          <i class="fa-solid fa-cloud" style="color: #ffca28;"></i> <span>Firebase</span>
+        </div>
+        <div class="floating-icon icon-ux">
+          <i class="fa-solid fa-palette" style="color: #f43f5e;"></i> <span>UI/UX</span>
+        </div>
+        <div class="floating-icon icon-api">
+          <i class="fa-solid fa-network-wired" style="color: #60a5fa;"></i> <span>REST API</span>
+        </div>
+        <div class="floating-icon icon-video">
+          <i class="fa-solid fa-video" style="color: #a78bfa;"></i> <span>Video Edit</span>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- ==========================================================================
+       PROMOTIONAL SEAMLESS SCROLLING BANNER
+       ========================================================================== -->
+  <div class="promo-banner">
+    <div class="promo-banner-inner">
+      <div class="promo-banner-text">
+        <span>Flutter Developer</span>
+        <span>Android App Developer</span>
+        <span>UI/UX Designer</span>
+        <span>Firebase Specialist</span>
+        <span>API Integrations</span>
+        <span>Video Editor</span>
+      </div>
+      <div class="promo-banner-text">
+        <span>Flutter Developer</span>
+        <span>Android App Developer</span>
+        <span>UI/UX Designer</span>
+        <span>Firebase Specialist</span>
+        <span>API Integrations</span>
+        <span>Video Editor</span>
+      </div>
+    </div>
+  </div>
 
+  <!-- ==========================================================================
+       ABOUT & EDUCATION SECTION
+       ========================================================================== -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="section-header">
+        <h2>About & Education</h2>
+        <p>A look into my academic journey, core background, and certifications.</p>
+      </div>
+      
+      <div class="about-grid">
+        <div class="about-info">
+          <h3>Professional Profile</h3>
+          <div id="about-profile-container">
+            <p>
+              Currently pursuing my Bachelor of Science in Computer Science at the University of Wah, I am deeply invested in creating applications that solve everyday problems. I focus on developing clean UI/UX designs and integrating robust API backends to deliver engaging mobile experiences.
+            </p>
+            <p>
+              In addition to app development, I have experience editing documentary-style videos for storytelling on YouTube, allowing me to blend engineering and visual creativity.
+            </p>
+          </div>
+          
+          <div class="about-stats" id="about-stats-container">
+            <div class="glass-card stat-item reveal-item">
+              <span class="stat-num">4+</span>
+              <p class="stat-label">Complex Apps Built</p>
+            </div>
+            <div class="glass-card stat-item reveal-item" id="certificates-card" style="cursor:pointer;">
+              <span class="stat-num" id="cert-count">3+</span>
+              <p class="stat-label">Certifications Earned</p>
+              <small style="color: var(--primary); display:block; margin-top:8px;">Click to View</small>
+            </div>
+          </div>
+
+          <!-- Featured Certificate Container -->
+          <div id="featured-certificate-container" class="reveal-item" style="margin-top: 2rem;"></div>
+        </div>
+        
+        <div>
+          <h3>Education Timeline</h3>
+          <div class="timeline" id="about-timeline-container">
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-date">Current Student (Graduating 2027)</div>
+              <div class="glass-card timeline-card reveal-item">
+                <h4>BS Computer Science</h4>
+                <h5>University of Wah, Wahcantt, Pakistan</h5>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Focusing on core computer science subjects, software engineering, databases, and mobile system architectures.</p>
+              </div>
+            </div>
+            
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-date">Dec 2025 - Jan 2026</div>
+              <div class="glass-card timeline-card reveal-item">
+                <h4>Introduction to AI</h4>
+                <h5>The Open University (United Kingdom)</h5>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Earned certification covering foundational artificial intelligence principles, machine learning concepts, and modern AI implementations.</p>
+              </div>
+            </div>
+            
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-date">Feb 2026</div>
+              <div class="glass-card timeline-card reveal-item">
+                <h4>App Development with Flutter</h4>
+                <h5>Cipher Schools</h5>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Comprehensive practical course detailing state management, clean architecture, responsive layouts, and animations in Flutter.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SKILLS SECTION
+       ========================================================================== -->
+  <section class="skills" id="skills">
+    <div class="container">
+      <div class="section-header">
+        <h2>My Skills</h2>
+        <p>Technologies, frameworks, and tools I use to bring mobile solutions to life.</p>
+      </div>
+      
+      <div class="skills-grid" id="skills-grid-container">
+        <div class="glass-card skill-card reveal-item">
+          <div class="skill-icon">
+            <i class="fa-brands fa-android"></i>
+          </div>
+          <h3>Android Development</h3>
+          <p>Proficient in native Android development, managing lifecycle, design guidelines, and system APIs.</p>
+        </div>
+        
+        <div class="glass-card skill-card reveal-item reveal-delay-1">
+          <div class="skill-icon">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+          </div>
+          <h3>Flutter Development</h3>
+          <p>Building high-performance cross-platform apps using Dart, covering state management and customized UI components.</p>
+        </div>
+        
+        <div class="glass-card skill-card reveal-item reveal-delay-2">
+          <div class="skill-icon">
+            <i class="fa-solid fa-palette"></i>
+          </div>
+          <h3>UI/UX Design</h3>
+          <p>Designing modern, intuitive layouts with a focus on responsiveness, dark modes, and micro-interactions.</p>
+        </div>
+        
+        <div class="glass-card skill-card reveal-item">
+          <div class="skill-icon">
+            <i class="fa-solid fa-cloud"></i>
+          </div>
+          <h3>Firebase Integration</h3>
+          <p>Integrating cloud services including Cloud Firestore real-time databases and Cloud Storage for assets.</p>
+        </div>
+        
+        <div class="glass-card skill-card reveal-item reveal-delay-1">
+          <div class="skill-icon">
+            <i class="fa-solid fa-network-wired"></i>
+          </div>
+          <h3>REST API Services</h3>
+          <p>Connecting apps with online databases and RESTful APIs to deliver real-time data synchronization.</p>
+        </div>
+        
+        <div class="glass-card skill-card reveal-item reveal-delay-2">
+          <div class="skill-icon">
+            <i class="fa-solid fa-video"></i>
+          </div>
+          <h3>Video Editing</h3>
+          <p>Editing documentary-style story videos, pacing, audio synchronization, and visual effects (Movavi).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       PROJECTS SECTION (WITH INTERACTIVE LIGHTBOX PREVIEW)
+       ========================================================================== -->
+  <section class="projects" id="projects">
+    <div class="container">
+      <div class="section-header">
+        <h2>Featured Projects</h2>
+        <p>Click on any project's cover image to open it in a full-screen preview. If there are multiple images, navigate using the control buttons.</p>
+      </div>
+      
+      <!-- Dynamic Projects Grid (first 3 rendered by JS) -->
+      <div class="projects-grid" id="home-projects-grid">
+        <!-- Rendered Dynamically via JS -->
+      </div>
+      
+      <!-- Show More Projects Button -->
+      <div class="projects-more-container">
+        <a href="projects.html" class="btn btn-primary">
+          <i class="fa-solid fa-briefcase"></i> Show More Projects
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       WORK EXPERIENCE SECTION
+       ========================================================================== -->
+  <section class="experience" id="experience">
+    <div class="container">
+      <div class="section-header">
+        <h2>Work Experience</h2>
+        <p>My professional and practical timeline in tech and media fields.</p>
+      </div>
+      
+      <div class="experience-timeline" id="experience-timeline-container">
+        <!-- Job 1 -->
+        <div class="exp-item">
+          <div class="exp-dot"><i class="fa-solid fa-mobile-button" style="font-size: 0.75rem; color: var(--primary);"></i></div>
+          <div class="glass-card exp-content reveal-item">
+            <div class="exp-header">
+              <div>
+                <h3>Mobile Application Developer Intern</h3>
+                <div class="exp-company">Arch Technologies</div>
+              </div>
+              <div class="exp-date">1 APR 2026 - 26 MAY 2026</div>
+            </div>
+            <ul class="exp-details">
+              <li>Worked on building and improving mobile applications, making sure they run smoothly and are easy to use.</li>
+              <li>Connected apps with online databases and APIs so that users could get real-time synced information.</li>
+              <li>Collaborated with team members, sharing ideas and solving coding problems together to deliver better results.</li>
+              <li>Spent time fixing bugs and optimizing rendering performance so the apps felt faster and more reliable.</li>
+              <li>Contributed to the design side, helping make the app interfaces more user-friendly and visually appealing.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Job 2 -->
+        <div class="exp-item">
+          <div class="exp-dot"><i class="fa-brands fa-youtube" style="font-size: 0.75rem; color: var(--primary);"></i></div>
+          <div class="glass-card exp-content reveal-item reveal-delay-1">
+            <div class="exp-header">
+              <div>
+                <h3>Video Editor</h3>
+                <div class="exp-company">YouTube Channel</div>
+              </div>
+              <div class="exp-date">10 JUN 2025 - 12 AUG 2025</div>
+            </div>
+            <ul class="exp-details">
+              <li>Edited documentary-style videos, turning raw footage and recordings into polished, engaging visual stories.</li>
+              <li>Developed pacing rhythms, clean transitions, and color/sound enhancements to retain audience attention.</li>
+              <li>Optimized export profiles for YouTube, ensuring professional grade quality and compatibility with platform guidelines.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       HOBBIES & ADDITIONAL DETAILS SECTION
+       ========================================================================== -->
+  <section class="additional-info" id="additional">
+    <div class="container">
+      <div class="section-header">
+        <h2>Interests & Languages</h2>
+        <p>A quick overview of what drives my creativity and how I communicate.</p>
+      </div>
+      
+      <div class="about-grid">
+        <div class="glass-card reveal-item" style="padding: 2.5rem;">
+          <h3 style="margin-bottom: 1.5rem; color: var(--primary);"><i class="fa-solid fa-heart" style="margin-right: 0.5rem;"></i> Hobbies & Interests</h3>
+          <ul class="exp-details" id="hobbies-container" style="display: flex; flex-direction: column; gap: 1rem;">
+            <li>Building and experimenting with mobile apps that solve everyday problems.</li>
+            <li>Designing user interfaces with a focus on UI/UX principles and digital engagement.</li>
+            <li>Editing video sequences and creating digital content for engaging storytelling.</li>
+            <li>Exploring new tech trends like IoT, Blockchain, and AI through small testing prototypes.</li>
+          </ul>
+        </div>
+        
+        <div class="glass-card reveal-item reveal-delay-1" style="padding: 2.5rem;">
+          <h3 style="margin-bottom: 1.5rem; color: var(--primary);"><i class="fa-solid fa-language" style="margin-right: 0.5rem;"></i> Language Skills</h3>
+          <div style="display: flex; flex-direction: column; gap: 1.5rem;" id="languages-container">
+            <div>
+              <h4 style="margin-bottom: 0.25rem;">Urdu</h4>
+              <p style="color: var(--text-muted); font-size: 0.95rem;">Mother tongue (Native proficiency)</p>
+            </div>
+            
+            <div>
+              <h4 style="margin-bottom: 0.5rem;">English (C1/C2 Proficient User)</h4>
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; font-size: 0.9rem;">
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 6px;">
+                  <strong style="color: var(--primary);">Reading:</strong> C1 Level
+                </div>
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 6px;">
+                  <strong style="color: var(--primary);">Listening:</strong> C2 Level
+                </div>
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 6px;">
+                  <strong style="color: var(--primary);">Writing:</strong> C2 Level
+                </div>
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 6px;">
+                  <strong style="color: var(--primary);">Speaking:</strong> A1/A2 Spoken
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       CONTACT SECTION
+       ========================================================================== -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <h2>Contact Me</h2>
+        <p>Let's collaborate! Feel free to reach out via email, phone, or LinkedIn.</p>
+      </div>
+      
+      <div class="contact-grid">
+        <div class="contact-info-wrapper">
+          <!-- Card Phone -->
+          <div class="glass-card contact-card reveal-item">
+            <div class="contact-icon">
+              <i class="fa-solid fa-phone"></i>
+            </div>
+            <div class="contact-details">
+              <h4>Phone</h4>
+              <p><a href="tel:+923305174366" id="contact-phone-val">(+92) 3305174366</a></p>
+            </div>
+          </div>
+
+          <!-- Card Email -->
+          <div class="glass-card contact-card reveal-item reveal-delay-1">
+            <div class="contact-icon">
+              <i class="fa-solid fa-envelope"></i>
+            </div>
+            <div class="contact-details">
+              <h4>Email</h4>
+              <p><a href="mailto:abdulhaseeb.cs.work@gmail.com" id="contact-email-val">abdulhaseeb.cs.work@gmail.com</a></p>
+            </div>
+          </div>
+
+          <!-- Card Location -->
+          <div class="glass-card contact-card reveal-item reveal-delay-2">
+            <div class="contact-icon">
+              <i class="fa-solid fa-location-dot"></i>
+            </div>
+            <div class="contact-details">
+              <h4>Location</h4>
+              <p id="contact-location-val">Wahcantt, Islamabad, Pakistan</p>
+            </div>
+          </div>
+
+          <!-- Socials -->
+          <div>
+            <h4>Social Channels</h4>
+            <div class="social-links" id="social-links-container">
+              <!-- Rendered Dynamically via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="glass-card contact-form reveal-item reveal-delay-1">
+          <div class="contact-form-header" style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+            <h3 style="color: var(--primary); margin: 0; font-size: 1.3rem;"><i class="fa-solid fa-paper-plane" style="margin-right: 0.5rem;"></i> Send a Message</h3>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfu4I7Qq9L1tViIGDm6NCTyIUR5VJyOx3H_PYCnPzOfSz0Qbw/viewform" target="_blank" class="direct-form-link" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem; transition: color 0.3s ease;">
+              <span>Open in Google Forms</span> <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.75rem;"></i>
+            </a>
+          </div>
+
+          <!-- Hidden Iframe to handle form submission without leaving page -->
+          <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
+          <form id="portfolio-form" action="https://docs.google.com/forms/d/e/1FAIpQLSfu4I7Qq9L1tViIGDm6NCTyIUR5VJyOx3H_PYCnPzOfSz0Qbw/formResponse" method="POST" target="hidden_iframe">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="entry.2005620554" class="form-control" placeholder="Enter your name" required>
+              </div>
+              
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="form-email">Your Email</label>
+                <input type="email" id="form-email" name="entry.1045781291" class="form-control" placeholder="Enter your email" required>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="form-phone">Phone Number</label>
+                <input type="tel" id="form-phone" name="entry.1166974658" class="form-control" placeholder="e.g. +92 330 5174366" required>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="form-address">Address / Subject</label>
+                <input type="text" id="form-address" name="entry.1065046570" class="form-control" placeholder="e.g. Wahcantt, Pakistan" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="entry.839337160" class="form-control" placeholder="Write your message here..." style="min-height: 120px;" required></textarea>
+            </div>
+
+            <button type="submit" id="contact-submit-btn" class="btn btn-primary" style="margin-top: 0.5rem; border: none; align-self: flex-start;">
+              <i class="fa-solid fa-paper-plane"></i> Send Message
+            </button>
+          </form>
+
+          <!-- Custom toast notification container -->
+          <div id="contact-toast" class="contact-toast" style="display: none;">
+            <div class="toast-content">
+              <i class="fa-solid fa-circle-check toast-icon"></i>
+              <div class="toast-message">
+                <strong>Message Sent!</strong>
+                <p>Thank you. Your message has been successfully recorded.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- ==========================================================================
        FOOTER
@@ -77,7 +663,7 @@
   </footer>
 
   <!-- ==========================================================================
-       FULLSCREEN LIGHTBOX MODAL (FOR PREVIEWS)
+       FULLSCREEN LIGHTBOX MODAL
        ========================================================================== -->
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image Lightbox">
     <button class="lightbox-close" id="lightbox-close" aria-label="Close Lightbox">
@@ -98,6 +684,126 @@
       <i class="fa-solid fa-chevron-right"></i>
     </button>
   </div>
+
+
+  <script>
+    const defaultCertificates = [
+      {
+        title: "App Development with Flutter",
+        issuer: "Arch Technologies",
+        image: "ct3.png"
+      },
+      {
+        title: "Introduction to AI",
+        issuer: "The Open University",
+        image: "ct1.png"
+      },
+      {
+        title: "Android Development",
+        issuer: "Professional Training",
+        image: "ct2.png"
+      }
+    ];
+
+    // Initialize or migrate certificates if placeholders exist or need update
+    const existingCerts = localStorage.getItem('portfolio_certificates');
+    if (!existingCerts || existingCerts.includes('placehold.co') || !existingCerts.includes('ct3.png') || existingCerts.includes('Cipher Schools')) {
+      localStorage.setItem('portfolio_certificates', JSON.stringify(defaultCertificates));
+    }
+
+    function renderCertificates(){
+      const certificates = JSON.parse(localStorage.getItem('portfolio_certificates')) || [];
+      const count = document.getElementById('cert-count');
+
+      if (count) {
+        count.textContent = certificates.length + '+';
+      }
+
+      // Render Featured Certificate exactly matching featured project card design
+      const featuredContainer = document.getElementById('featured-certificate-container');
+      if (featuredContainer) {
+        if (certificates.length > 0) {
+          const featuredCert = certificates[0];
+          featuredContainer.innerHTML = `
+            <div class="glass-card project-card reveal-item revealed" style="margin-top: 1rem; overflow: hidden; border-radius: 1.25rem; transition: transform var(--transition), box-shadow var(--transition);">
+              <div class="project-img-wrapper" style="height: 310px; overflow: hidden; background: rgba(0,0,0,0.15); position: relative; padding: 0.75rem 0.75rem 0 0.75rem;">
+                <img src="${featuredCert.image}" alt="${featuredCert.title}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 0.75rem; border: 1px solid rgba(255, 255, 255, 0.05);">
+                <div class="project-overlay" id="featured-cert-zoom-trigger" data-image="${featuredCert.image}" data-title="${featuredCert.title}" style="cursor: pointer; border-radius: 0.75rem; margin: 0.75rem 0.75rem 0 0.75rem; width: calc(100% - 1.5rem); height: calc(100% - 0.75rem);">
+                  <button class="project-zoom-btn" aria-label="Open Fullscreen Preview" style="width: 45px; height: 45px; font-size: 1.1rem;">
+                    <i class="fa-solid fa-expand"></i>
+                  </button>
+                  <span class="project-overlay-text" style="font-size: 0.8rem; font-weight: 600;">CLICK TO ZOOM</span>
+                </div>
+              </div>
+              <div class="project-info" style="padding: 1.25rem 1.25rem 1rem 1.25rem; gap: 0.25rem;">
+                <h3 style="margin: 0; font-size: 1.35rem; font-weight: 700; color: white; letter-spacing: -0.01em;">${featuredCert.title}</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">Issued by ${featuredCert.issuer}</p>
+              </div>
+            </div>
+            <div style="margin-top: 1.25rem;">
+              <a href="certificates.html" class="btn" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.5rem; text-decoration: none; box-sizing: border-box; background: linear-gradient(90deg, #38bdf8, #3b82f6, #6366f1); color: white; border: none; font-weight: bold; border-radius: 50px; padding: 0.9rem; box-shadow: 0 0 15px rgba(56, 189, 248, 0.25); transition: transform var(--transition), box-shadow var(--transition);">
+                <i class="fa-solid fa-award"></i> Show More Certificates
+              </a>
+            </div>
+          `;
+        } else {
+          featuredContainer.innerHTML = `
+            <div class="glass-card project-card reveal-item revealed" style="padding: 2rem; text-align: center; margin-top: 1rem;">
+              <i class="fa-solid fa-certificate" style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+              <h4 style="color: white; margin-bottom: 0.5rem;">No Certificates Uploaded</h4>
+              <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.4;">Upload certifications from the Manager panel to display them here.</p>
+            </div>
+          `;
+        }
+      }
+    }
+
+    // Initial render
+    renderCertificates();
+
+    // Event Delegation on document.body for certificates actions
+    document.body.addEventListener('click', (e) => {
+      // 1. Click on certificates-card redirects to certificates.html with transition
+      if (e.target.closest('#certificates-card')) {
+        e.preventDefault();
+        document.body.classList.add('page-exit');
+        const overlay = document.querySelector('.page-transition-overlay');
+        if (overlay) overlay.classList.add('active');
+        setTimeout(() => { window.location.href = 'certificates.html'; }, 400);
+        return;
+      }
+
+      // 2. Click to zoom featured certificate in native lightbox
+      const featuredZoom = e.target.closest('#featured-cert-zoom-trigger');
+      if (featuredZoom) {
+        e.stopPropagation();
+        zoomCertificateInLightbox(featuredZoom.getAttribute('data-image'), featuredZoom.getAttribute('data-title'));
+        return;
+      }
+    });
+
+    function zoomCertificateInLightbox(imageSrc, imageTitle) {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const lightboxCaption = document.getElementById('lightbox-caption');
+      const lightboxCounter = document.getElementById('lightbox-counter');
+      const lightboxPrev = document.getElementById('lightbox-prev');
+      const lightboxNext = document.getElementById('lightbox-next');
+
+      if (lightbox && lightboxImg) {
+        lightboxImg.src = imageSrc;
+        lightboxImg.alt = imageTitle;
+        if (lightboxCaption) lightboxCaption.textContent = imageTitle;
+        if (lightboxCounter) lightboxCounter.textContent = "Certificate Viewer";
+        if (lightboxPrev) lightboxPrev.classList.add('hidden');
+        if (lightboxNext) lightboxNext.classList.add('hidden');
+
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+  </script>
+
 
   <!-- Link Javascript -->
   <script src="script.js"></script>
